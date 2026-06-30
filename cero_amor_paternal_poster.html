@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Violentómetro Vicario: Cero Amor Paternal | NICÓMACO Clínica de Contacto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ─── BASE RESET & STYLES ──────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg:          #07070F;
+      --bg-card:     rgba(255, 255, 255, 0.03);
+      --border:      rgba(255, 255, 255, 0.08);
+      --text:        #F8F8FF;
+      --text-muted:  rgba(248, 248, 255, 0.5);
+      
+      --verde:       #059669;
+      --amarillo:    #D97706;
+      --rojo:        #DC2626;
+      --critico:     #7F1D1D;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      padding: 3rem 1.5rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(76, 29, 149, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(220, 38, 38, 0.08) 0%, transparent 50%);
+      background-attachment: fixed;
+    }
+    h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+    /* ─── POSTER CONTAINER ─────────────────────────────────────── */
+    .poster-container {
+      width: 100%;
+      max-width: 900px;
+      background: rgba(13, 13, 24, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 3.5rem;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(124, 58, 237, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    .poster-container::before {
+      content: '';
+      position: absolute; top: -10%; left: -10%; width: 120%; height: 120%;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.03) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ─── HEADER ───────────────────────────────────────────────── */
+    header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+      position: relative;
+      z-index: 2;
+    }
+    .logo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .logo-img {
+      height: 64px;
+      width: auto;
+      filter: drop-shadow(0 0 12px rgba(124, 58, 237, 0.4));
+    }
+    .logo-brand {
+      font-size: 1.3rem; font-weight: 700; letter-spacing: 0.12em;
+      background: linear-gradient(90deg, #7C3AED 0%, #10B981 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .logo-sub {
+      font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .poster-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 900;
+      color: #E2E8F0;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+    .poster-subtitle {
+      font-size: 1rem;
+      color: #7C3AED;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+    }
+    .poster-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ─── VIOLENTOMETER GRID ───────────────────────────────────── */
+    .violentometro-grid {
+      display: grid;
+      grid-template-columns: 180px auto;
+      gap: 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Left Alerts Column */
+    .alerts-column {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px dashed rgba(255, 255, 255, 0.1);
+      padding-right: 1.5rem;
+      text-align: right;
+    }
+    .alert-block {
+      position: sticky;
+      top: 100px;
+      margin-bottom: 8rem;
+    }
+    .alert-block:last-child {
+      margin-bottom: 0;
+    }
+    .alert-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      font-family: 'Playfair Display', serif;
+    }
+    .alert-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .alert-block.verde-alert .alert-title { color: var(--verde); }
+    .alert-block.amarillo-alert .alert-title { color: var(--amarillo); }
+    .alert-block.rojo-alert .alert-title { color: var(--rojo); }
+    .alert-block.critico-alert .alert-title { color: #FFAAAA; }
+
+    /* Right Scale Column */
+    .scale-column {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .scale-row {
+      display: flex;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+    .scale-row:hover {
+      transform: translateX(4px);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .scale-num {
+      font-size: 0.85rem;
+      font-weight: 700;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1.25rem;
+      flex-shrink: 0;
+      color: #FFF;
+      font-family: monospace;
+    }
+    .scale-content {
+      flex: 1;
+    }
+    .scale-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 0.15rem;
+    }
+    .scale-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Colors and borders by zone */
+    .scale-row.zone-verde { border-left: 4px solid var(--verde); }
+    .scale-row.zone-verde .scale-num { background: var(--verde); box-shadow: 0 0 10px rgba(5, 150, 105, 0.3); }
+    .scale-row.zone-verde .scale-name { color: #34D399; }
+    
+    .scale-row.zone-amarilla { border-left: 4px solid var(--amarillo); }
+    .scale-row.zone-amarilla .scale-num { background: var(--amarillo); box-shadow: 0 0 10px rgba(217, 119, 6, 0.3); }
+    .scale-row.zone-amarilla .scale-name { color: #FBBF24; }
+    
+    .scale-row.zone-roja { border-left: 4px solid var(--rojo); }
+    .scale-row.zone-roja .scale-num { background: var(--rojo); box-shadow: 0 0 10px rgba(220, 38, 38, 0.3); }
+    .scale-row.zone-roja .scale-name { color: #F87171; }
+    
+    .scale-row.zone-critica { border-left: 4px solid var(--critico); background: rgba(127, 29, 29, 0.08); }
+    .scale-row.zone-critica .scale-num { background: var(--critico); box-shadow: 0 0 10px rgba(127, 29, 29, 0.5); }
+    .scale-row.zone-critica .scale-name { color: #FFAAAA; }
+
+    /* ─── FOOTER ───────────────────────────────────────────────── */
+    footer {
+      margin-top: 3.5rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      padding-top: 2rem;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      position: relative;
+      z-index: 2;
+    }
+    .print-btn {
+      margin-top: 2rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(124, 58, 237, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .print-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px rgba(124, 58, 237, 0.4);
+    }
+
+    /* ─── RESPONSIVE ───────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .poster-container { padding: 2rem 1.25rem; }
+      .violentometro-grid { grid-template-columns: 1fr; }
+      .alerts-column { display: none; }
+      .scale-row { padding: 0.5rem 0.75rem; }
+      .scale-num { margin-right: 0.75rem; }
+    }
+
+    /* Print styles */
+    @media print {
+      body { background: white; color: black; padding: 0; }
+      .poster-container { box-shadow: none; border: none; padding: 0; width: 100%; max-width: 100%; background: white; }
+      .scale-row { page-break-inside: avoid; border: 1px solid #ddd; background: white !important; color: black; }
+      .print-btn { display: none; }
+      .scale-num { color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .scale-row.zone-verde { border-left: 6px solid var(--verde) !important; }
+      .scale-row.zone-amarilla { border-left: 6px solid var(--amarillo) !important; }
+      .scale-row.zone-roja { border-left: 6px solid var(--rojo) !important; }
+      .scale-row.zone-critica { border-left: 6px solid var(--critico) !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="poster-container">
+    <!-- ═══ HEADER ═══ -->
+    <header>
+      <div class="logo-container">
+        <img src="img/logo.png" alt="Logo NICÓMACO" class="logo-img" onerror="this.src='Modelo-amoragape.png'">
+        <span class="logo-brand">NICÓMACO</span>
+        <span class="logo-sub">Clínica de Contacto®</span>
+      </div>
+      <h1 class="poster-title">CERO AMOR PATERNAL</h1>
+      <div class="poster-subtitle">Violentómetro de Violencia Vicaria</div>
+      <p class="poster-desc">
+        Herramienta diagnóstica de datos compilatorios que visibiliza la escala progresiva de maltrato ejercido por el padre que utiliza a sus hijos e hijas como instrumento para infligir el máximo dolor psicológico e irreversible a la madre.
+      </p>
+    </header>
+
+    <!-- ═══ VIOLENTOMETER GRID ═══ -->
+    <div class="violentometro-grid">
+      
+      <!-- Left side alerts -->
+      <div class="alerts-column">
+        <div class="alert-block verde-alert" style="margin-top: 1rem;">
+          <div class="alert-title">¡Date cuenta!</div>
+          <div class="alert-desc">Señales tempranas de control, desprestigio y alienación inicial en la relación paterno-filial.</div>
+        </div>
+        
+        <div class="alert-block amarillo-alert" style="margin-top: 14rem;">
+          <div class="alert-title">¡Reacciona!</div>
+          <div class="alert-desc">Hostigamiento económico, sabotaje a la rutina escolar/médica y obstrucción activa del vínculo de la madre.</div>
+        </div>
+        
+        <div class="alert-block rojo-alert" style="margin-top: 18rem;">
+          <div class="alert-title">¡Peligro!</div>
+          <div class="alert-desc">Violencia psicológica grave, campañas de alienación coordinadas y amenazas directas de sustracción.</div>
+        </div>
+        
+        <div class="alert-block critico-alert" style="margin-top: 20rem; margin-bottom: 2rem;">
+          <div class="alert-title">¡Ayuda urgente!</div>
+          <div class="alert-desc">Agresiones físicas severas, abuso, secuestro parental o riesgo letal (filicidio) para los hijos.</div>
+        </div>
+      </div>
+
+      <!-- Right side scale -->
+      <div class="scale-column" id="scale-list">
+        <!-- RENDERED BY JAVASCRIPT DYNAMICALLY FOR CLEAN CODE -->
+      </div>
+
+    </div>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer>
+      <p>©2026 Blanca Estela Angulo López · Todos los Derechos Reservados</p>
+      <p>Clínica de Contacto NICÓMACO® · Programa de Apoyo Psicológico y Registro de Herramientas Compilatorias</p>
+      <p>Reg. No. 03-2026-06101140-01 (Cero Amor Paternal)</p>
+      <button class="print-btn" onclick="window.print()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.3rem;"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+        Imprimir Póster
+      </button>
+    </footer>
+
+  </div>
+
+  <script>
+    // 50 levels data compiled vertically
+    const levels = [
+      { num: 1, zone: 'verde', name: "Hablar mal / Descalificar", desc: "Hablar de manera despectiva, con insultos o descalificaciones de la madre en presencia de los hijos." },
+      { num: 2, zone: 'verde', name: "Cuestionar autoridad", desc: "Desautorizar las decisiones de crianza, límites o reglas de la madre ante los menores." },
+      { num: 3, zone: 'verde', name: "Ridiculizar hábitos", desc: "Burlarse destructivamente de la profesión, pasatiempos o hábitos de la madre frente a los niños." },
+      { num: 4, zone: 'verde', name: "Sabotear comunicación", desc: "Ignorar, cortar o limitar las llamadas o videollamadas de la madre con los hijos durante las visitas." },
+      { num: 5, zone: 'verde', name: "Fomentar desobediencia", desc: "Incitar o aplaudir que los hijos desobedezcan o falten al respeto a la madre." },
+      { num: 6, zone: 'verde', name: "Espionaje / Interrogatorios", desc: "Interrogar a los hijos sobre la vida privada, relaciones sentimentales o finanzas de la madre." },
+      { num: 7, zone: 'verde', name: "Hijos como mensajeros", desc: "Utilizar a los hijos para transmitir quejas o advertencias hostiles a la madre." },
+      { num: 8, zone: 'verde', name: "Culpabilizar por ruptura", desc: "Hacer creer a los hijos que la madre es la única culpable del divorcio o separación." },
+      { num: 9, zone: 'verde', name: "Castigo de afecto", desc: "Mostrar enojo o culpa a los hijos cuando expresan cariño o deseo de estar con la madre." },
+      { num: 10, zone: 'verde', name: "Comparación despectiva", desc: "Comparar negativamente a la madre con nuevas parejas u otros familiares paternos." },
+      { num: 11, zone: 'verde', name: "Ocultar información básica", desc: "No informar sobre eventos, reuniones escolares o cuestiones médicas de los hijos." },
+      { num: 12, zone: 'verde', name: "Desvalorizar cuidados", desc: "Decir a los hijos que los alimentos, ropa o atención de la madre son malos o dañinos." },
+      
+      { num: 13, zone: 'amarilla', name: "Incumplimiento alimentario", desc: "Dejar de pagar la pensión alimenticia acordada para asfixiar económicamente a la madre." },
+      { num: 14, zone: 'amarilla', name: "Justificación económica falsa", desc: "Decirle a los hijos que no tienen cosas porque la madre se gasta el dinero o les roba." },
+      { num: 15, zone: 'amarilla', name: "Desestabilización horaria", desc: "Incumplir con los horarios de entrega y recogida de los hijos para alterar la vida de la madre." },
+      { num: 16, zone: 'amarilla', name: "Interferencia en citas", desc: "Sabotear citas médicas, terapias o actividades escolares programadas por la madre." },
+      { num: 17, zone: 'amarilla', name: "Enfermedades simuladas", desc: "Manipular a los hijos para que finjan estar enfermos y no regresar con la madre tras la visita." },
+      { num: 18, zone: 'amarilla', name: "Competencia material desleal", desc: "Ofrecer regalos costosos o promesas desmedidas para desautorizar la disciplina de la madre." },
+      { num: 19, zone: 'amarilla', name: "Chantaje emocional de soledad", desc: "Hacerse la víctima diciéndole a los hijos que se enfermará o estará triste si regresan con su madre." },
+      { num: 20, zone: 'amarilla', name: "Imposición de secretos", desc: "Obligar a los hijos a guardarle secretos sobre lo que pasa en la casa del padre." },
+      { num: 21, zone: 'amarilla', name: "Boicot a festividades", desc: "Retener a los hijos en celebraciones clave (cumpleaños de la madre, Día de las Madres) para impedir festejos." },
+      { num: 22, zone: 'amarilla', name: "Condicionamiento financiero", desc: "Condicionar el pago de colegiaturas o salud de los hijos a cambio de exigencias hacia la madre." },
+      { num: 23, zone: 'amarilla', name: "Amenazas de custodia", desc: "Amenazar constantemente a la madre con arrebatarle judicialmente la custodia de los hijos." },
+      { num: 24, zone: 'amarilla', name: "Testimonios falsos inducidos", desc: "Inducir o presionar a los hijos para que den declaraciones falsas contra la madre." },
+      { num: 25, zone: 'amarilla', name: "Bloqueo terapéutico", desc: "Oponerse o no firmar los consentimientos para que los hijos reciban terapia o apoyo psicológico." },
+      
+      { num: 26, zone: 'roja', name: "Retención de documentos", desc: "Ocultar o retener actas oficiales o pasaportes de los hijos para limitar trámites de la madre." },
+      { num: 27, zone: 'roja', name: "Inculcar temor al abandono", desc: "Inculcar miedo a los hijos diciéndoles que la madre los va a abandonar o que no los quiere." },
+      { num: 28, zone: 'roja', name: "Retención deliberada", desc: "Quedarse con los hijos fuera de los días establecidos legalmente de manera intencionada." },
+      { num: 29, zone: 'roja', name: "Devolución condicionada", desc: "Exigir que la madre retire demandas o denuncias penales como condición para devolver a los hijos." },
+      { num: 30, zone: 'roja', name: "Castigo por lealtad materna", desc: "Reprender o castigar a los hijos cuando expresan que extrañan a la madre o intentan defenderla." },
+      { num: 31, zone: 'roja', name: "Campaña familiar extendida", desc: "Permitir y coordinar que la familia paterna insulte o descalifique a la madre frente a los niños." },
+      { num: 32, zone: 'roja', name: "Cambios unilaterales graves", desc: "Mudar de domicilio o cambiar a los hijos de colegio sin consentimiento ni aviso previo a la madre." },
+      { num: 33, zone: 'roja', name: "Amenaza de separación perpetua", desc: "Amenazar directamente a la madre con que jamás volverá a ver a sus hijos." },
+      { num: 34, zone: 'roja', name: "Denuncias institucionales falsas", desc: "Denunciar falsamente a la madre ante protección de menores para forzar la pérdida de custodia." },
+      { num: 35, zone: 'roja', name: "Sustracción temporal oculta", desc: "Esconder a los hijos durante días, cortando todo canal de comunicación telefónica o presencial." },
+      { num: 36, zone: 'roja', name: "Negligencia física provocada", desc: "Descuidar deliberadamente la higiene, alimentación o salud escolar para provocar angustia." },
+      { num: 37, zone: 'roja', name: "Destrucción de pertenencias", desc: "Tirar, regalar o destruir ropa, útiles o juguetes de los hijos que fueron comprados por la madre." },
+      { num: 38, zone: 'roja', name: "Alienación severa consumada", desc: "Destruir por completo el vínculo materno, logrando hostilidad y rechazo total de los hijos." },
+      
+      { num: 39, zone: 'critica', name: "Amenaza de daño físico infantil", desc: "Enviar advertencias de que golpeará o causará daño físico a los hijos para doblegar a la madre." },
+      { num: 40, zone: 'critica', name: "Confinamiento / Cautiverio", desc: "Encerrar a los hijos o privarlos de salir de casa durante semanas para incomunicarlos." },
+      { num: 41, zone: 'critica', name: "Abantono en vía pública", desc: "Dejar a los hijos solos en la calle o con extraños hostiles con el único fin de aterrorizar." },
+      { num: 42, zone: 'critica', name: "Amenazas de muerte infantil", desc: "Amenazar con quitarle la vida a los hijos como advertencia o castigo final hacia la madre." },
+      { num: 43, zone: 'critica', name: "Secuestro parental definitivo", desc: "Sustraer a los hijos de forma permanente, trasladándolos de estado o país de manera oculta." },
+      { num: 44, zone: 'critica', name: "Intoxicación farmacológica", desc: "Suministrar medicamentos o sustancias no prescritas a los hijos para doparlos o enfermarles." },
+      { num: 45, zone: 'critica', name: "Maltrato físico severo", desc: "Golpear brutalmente a los hijos con objetos, alegando que la madre es la culpable de su castigo." },
+      { num: 46, zone: 'critica', name: "Violencia física presenciada", desc: "Obligar a los hijos a presenciar agresiones brutales a la madre o autolesiones sangrientas del padre." },
+      { num: 47, zone: 'critica', name: "Abuso sexual vicario", desc: "Agredir sexualmente a los hijos con el fin explícito de destruir psicológicamente a la madre." },
+      { num: 48, zone: 'critica', name: "Riesgo de vida provocado", desc: "Poner en riesgo letal simulado la vida de los hijos (alturas, choques inducidos) para asustar." },
+      { num: 49, zone: 'critica', name: "Lesiones graves permanentes", desc: "Provocar quemaduras, fracturas graves o mutilaciones físicas en los hijos con finalidad vicaria." },
+      { num: 50, zone: 'critica', name: "Homicidio vicario (Filicidio)", desc: "Asesinar a los hijos para consumar el máximo e irreversible dolor emocional a la madre (Destrucción Total)." }
+    ];
+
+    const listContainer = document.getElementById('scale-list');
+    
+    levels.forEach(lvl => {
+      const row = document.createElement('div');
+      row.className = `scale-row zone-${lvl.zone}`;
+      row.innerHTML = `
+        <span class="scale-num">${lvl.num}</span>
+        <div class="scale-content">
+          <div class="scale-name">${lvl.name}</div>
+          <div class="scale-desc">${lvl.desc}</div>
+        </div>
+      `;
+      listContainer.appendChild(row);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cero Amor → Amor Ágape | NICOMACO Clínica de Cambio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ─── RESET & BASE ─────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --purple:      #7C3AED;
+      --purple-dark: #4C1D95;
+      --purple-glow: rgba(124, 58, 237, 0.4);
+      --emerald:     #059669;
+      --emerald-light:#10B981;
+      --emerald-glow:rgba(5, 150, 105, 0.4);
+      --bg:          #07070F;
+      --bg-card:     rgba(255,255,255,0.04);
+      --border:      rgba(255,255,255,0.08);
+      --text:        #F8F8FF;
+      --text-muted:  rgba(248,248,255,0.5);
+      --grad-hero:   linear-gradient(135deg, #4C1D95 0%, #07070F 50%, #064E3B 100%);
+      --transition:  cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+    h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+    /* ─── CUSTOM CURSOR ────────────────────────────────────────── */
+    #cursor-outer {
+      position: fixed; top: 0; left: 0; z-index: 9999;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1.5px solid rgba(124,58,237,0.7);
+      pointer-events: none;
+      transition: transform 0.12s var(--transition),
+                  width 0.3s var(--transition),
+                  height 0.3s var(--transition),
+                  border-color 0.3s ease,
+                  background 0.3s ease;
+      transform: translate(-50%, -50%);
+    }
+    #cursor-dot {
+      position: fixed; top: 0; left: 0; z-index: 10000;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--purple);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: transform 0.04s linear,
+                  background 0.3s ease;
+    }
+    body.hovering #cursor-outer {
+      width: 64px; height: 64px;
+      background: rgba(124,58,237,0.12);
+      border-color: var(--purple);
+    }
+    body.hovering #cursor-dot { background: white; }
+
+    /* ─── NAVIGATION ───────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 1.25rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.5s ease, backdrop-filter 0.5s ease, box-shadow 0.5s ease;
+    }
+    nav.scrolled {
+      background: rgba(7,7,15,0.85);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 1px 0 var(--border);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 0.75rem;
+      text-decoration: none;
+    }
+    .nav-logo img {
+      height: 48px; width: auto;
+      filter: drop-shadow(0 0 8px rgba(124,58,237,0.4));
+      transition: filter 0.3s ease;
+    }
+    .nav-logo:hover img {
+      filter: drop-shadow(0 0 14px rgba(124,58,237,0.7));
+    }
+    .nav-logo-text { display: flex; flex-direction: column; gap: 1px; }
+    .nav-logo-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem; font-weight: 700; letter-spacing: 0.08em;
+      background: linear-gradient(90deg, var(--purple) 0%, var(--emerald-light) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-logo-sub {
+      font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .nav-links {
+      display: flex; gap: 2rem; list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-muted); text-decoration: none;
+      font-size: 0.85rem; letter-spacing: 0.04em;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: linear-gradient(90deg, var(--purple), var(--emerald));
+      transition: width 0.4s var(--transition);
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { width: 100%; }
+    .btn-nav {
+      padding: 0.6rem 1.5rem;
+      border: 1px solid rgba(124,58,237,0.5);
+      border-radius: 100px;
+      background: rgba(124,58,237,0.1);
+      color: var(--text);
+      text-decoration: none; font-size: 0.85rem;
+      transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .btn-nav:hover {
+      background: rgba(124,58,237,0.2);
+      border-color: var(--purple);
+      box-shadow: 0 0 20px var(--purple-glow);
+    }
+
+    /* ─── HERO ─────────────────────────────────────────────────── */
+    #hero {
+      position: relative; height: 100vh; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #hero-video-wrap {
+      position: absolute; inset: -10%;
+      will-change: transform;
+      /* Fallback gradient si el video no carga */
+      background: linear-gradient(135deg, #4C1D95 0%, #07070F 50%, #064E3B 100%);
+    }
+    #hero-video {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      transform-origin: center center;
+      transition: transform 0.05s linear;
+      display: block;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(7,7,15,0.2) 0%,
+        rgba(7,7,15,0.55) 50%,
+        rgba(7,7,15,0.95) 100%
+      );
+      z-index: 2;
+    }
+    .hero-content {
+      position: relative; z-index: 3;
+      text-align: center; padding: 0 1.5rem;
+      max-width: 900px;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 1.75rem;
+      animation: fadeInDown 1s var(--transition) both;
+    }
+    .hero-eyebrow-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--emerald);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(1.4); }
+    }
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 900; line-height: 1.0;
+      margin-bottom: 1rem;
+      animation: fadeInUp 1s 0.2s var(--transition) both;
+    }
+    .hero-title-zero {
+      display: block;
+      color: #C4B5FD;
+      text-shadow: 0 0 60px rgba(124,58,237,0.6);
+    }
+    .hero-title-arrow {
+      display: block;
+      font-size: 0.55em; font-style: italic;
+      color: var(--text-muted); margin: 0.1em 0;
+    }
+    .hero-title-agape {
+      display: block;
+      background: linear-gradient(135deg, #6EE7B7, #34D399, #059669);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: none;
+      filter: drop-shadow(0 0 30px rgba(5,150,105,0.5));
+    }
+    .hero-subtitle {
+      font-size: clamp(1rem, 2vw, 1.2rem); font-weight: 300;
+      color: var(--text-muted); max-width: 580px; margin: 0 auto 2.5rem;
+      line-height: 1.75;
+      animation: fadeInUp 1s 0.35s var(--transition) both;
+    }
+    .hero-cta-group {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      animation: fadeInUp 1s 0.5s var(--transition) both;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.9rem 2.2rem;
+      background: linear-gradient(135deg, var(--purple) 0%, #5B21B6 100%);
+      color: white; text-decoration: none;
+      border-radius: 100px; font-size: 0.95rem; font-weight: 500;
+      letter-spacing: 0.02em;
+      box-shadow: 0 0 0 1px rgba(124,58,237,0.5), 0 10px 40px var(--purple-glow);
+      transition: transform 0.3s var(--transition),
+                  box-shadow 0.3s ease;
+      position: relative; overflow: hidden;
+    }
+    .btn-primary::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 0 0 1px rgba(124,58,237,0.8), 0 20px 60px var(--purple-glow);
+    }
+    .btn-primary:hover::before { opacity: 1; }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.9rem 2.2rem;
+      border: 1px solid var(--border);
+      border-radius: 100px; color: var(--text-muted);
+      text-decoration: none; font-size: 0.95rem;
+      transition: border-color 0.3s ease, color 0.3s ease,
+                  transform 0.3s var(--transition), box-shadow 0.3s ease;
+    }
+    .btn-secondary:hover {
+      border-color: rgba(255,255,255,0.3); color: var(--text);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .hero-scroll-hint {
+      position: absolute; bottom: 2rem; left: 50%; z-index: 3;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      color: var(--text-muted); font-size: 0.7rem; letter-spacing: 0.12em;
+      text-transform: uppercase;
+      animation: fadeInUp 1s 0.8s var(--transition) both;
+    }
+    .scroll-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, var(--border), transparent);
+      position: relative; overflow: hidden;
+    }
+    .scroll-line::after {
+      content: ''; position: absolute;
+      top: -100%; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(to bottom, var(--purple), var(--emerald));
+      animation: scroll-line-anim 2s ease-in-out infinite;
+    }
+    @keyframes scroll-line-anim {
+      0%   { top: -100%; }
+      100% { top: 100%; }
+    }
+
+    /* ─── SECTIONS SHARED ──────────────────────────────────────── */
+    section { padding: 8rem 2rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-eyebrow {
+      font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--purple); margin-bottom: 1rem;
+    }
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700; line-height: 1.15;
+      margin-bottom: 1.25rem;
+    }
+    .section-subtitle {
+      font-size: 1.05rem; color: var(--text-muted); line-height: 1.75;
+      max-width: 560px;
+    }
+    .reveal {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 0.8s var(--transition), transform 0.8s var(--transition);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── STATS BAR ────────────────────────────────────────────── */
+    #stats {
+      padding: 4rem 2rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+      gap: 3rem; text-align: center;
+    }
+    .stat-item { position: relative; }
+    .stat-item::after {
+      content: ''; position: absolute; right: 0; top: 20%;
+      width: 1px; height: 60%;
+      background: var(--border);
+    }
+    .stat-item:last-child::after { display: none; }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem; font-weight: 700; line-height: 1;
+      background: linear-gradient(135deg, var(--purple), var(--emerald));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; letter-spacing: 0.05em; }
+
+    /* ─── DIAGNÓSTICO (PROBLEMA) ───────────────────────────────── */
+    #diagnostico {
+      background: radial-gradient(ellipse 80% 60% at 0% 50%, rgba(76,29,149,0.15) 0%, transparent 70%);
+    }
+    .diag-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+    }
+    .diag-visual {
+      position: relative;
+    }
+    .diag-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      position: relative; overflow: hidden;
+      transition: transform 0.5s var(--transition), box-shadow 0.5s ease;
+    }
+    .diag-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+    }
+    .diag-card-glow {
+      position: absolute; top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .diag-card-top {
+      display: flex; align-items: center; gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .diag-card-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      background: rgba(124,58,237,0.15);
+      flex-shrink: 0;
+    }
+    .diag-card-title { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.04em; }
+    .diag-signals { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+    .diag-signals li {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      font-size: 0.88rem; color: var(--text-muted); line-height: 1.5;
+    }
+    .diag-signals li::before {
+      content: ''; flex-shrink: 0;
+      width: 6px; height: 6px; border-radius: 50%;
+      margin-top: 6px;
+      background: var(--purple);
+    }
+    .diag-float {
+      position: absolute; right: -1rem; top: -1rem;
+      background: rgba(76,29,149,0.25);
+      border: 1px solid rgba(124,58,237,0.3);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem; color: #C4B5FD;
+      backdrop-filter: blur(10px);
+      animation: float-anim 4s ease-in-out infinite;
+    }
+    @keyframes float-anim {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    /* ─── ESCALA / AUTOVIOLENTÓMETRO ───────────────────────────── */
+    #escala {
+      background: linear-gradient(to bottom, transparent, rgba(76,29,149,0.06) 30%, rgba(5,78,59,0.06) 70%, transparent);
+    }
+    .scale-header { text-align: center; margin-bottom: 4rem; }
+    .scale-container {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 3rem;
+      overflow: hidden;
+    }
+    .scale-container::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 50%; bottom: 0;
+      background: rgba(124,58,237,0.04);
+      pointer-events: none;
+    }
+    .scale-container::after {
+      content: '';
+      position: absolute; top: 0; left: 50%; right: 0; bottom: 0;
+      background: rgba(5,150,105,0.04);
+      pointer-events: none;
+    }
+    .scale-header-row {
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      gap: 2rem; align-items: center; margin-bottom: 2.5rem;
+      position: relative; z-index: 1;
+    }
+    .scale-side-label {
+      display: flex; flex-direction: column; gap: 0.35rem;
+    }
+    .scale-side-label.right { text-align: right; }
+    .scale-side-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; font-weight: 700;
+    }
+    .scale-side-name.zero { color: #C4B5FD; }
+    .scale-side-name.agape { color: #6EE7B7; }
+    .scale-side-desc { font-size: 0.8rem; color: var(--text-muted); }
+    .scale-divider-icon {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+    }
+    .scale-track {
+      height: 8px; border-radius: 100px;
+      background: linear-gradient(to right, #4C1D95, #7C3AED, #6D28D9, #0D9488, #059669, #047857);
+      margin: 0.5rem 0 2rem; position: relative; z-index: 1;
+      overflow: visible;
+    }
+    .scale-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2rem; position: relative; z-index: 1;
+    }
+    .scale-col { display: flex; flex-direction: column; gap: 0.75rem; }
+    .scale-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.6rem 0.9rem; border-radius: 10px;
+      font-size: 0.82rem; line-height: 1.45;
+      transition: background 0.3s ease, transform 0.3s var(--transition);
+      cursor: default;
+    }
+    .scale-item:hover { transform: translateX(4px); }
+    .scale-item.zero-item {
+      border-left: 2px solid rgba(124,58,237,0.4);
+      background: rgba(124,58,237,0.05);
+    }
+    .scale-item.zero-item:hover { background: rgba(124,58,237,0.1); }
+    .scale-item.agape-item {
+      border-left: 2px solid rgba(5,150,105,0.4);
+      background: rgba(5,150,105,0.05);
+    }
+    .scale-item.agape-item:hover { background: rgba(5,150,105,0.1); }
+    .scale-item-num {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em;
+      min-width: 22px;
+    }
+    .zero-item .scale-item-num { color: #A78BFA; }
+    .agape-item .scale-item-num { color: #6EE7B7; }
+    .scale-cta {
+      text-align: center; margin-top: 3rem;
+      position: relative; z-index: 1;
+    }
+    .scale-cta p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; }
+
+    /* ─── PROGRAMA ─────────────────────────────────────────────── */
+    #programa {
+      background: radial-gradient(ellipse 70% 50% at 100% 50%, rgba(5,150,105,0.08) 0%, transparent 70%);
+    }
+    .prog-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+    }
+    .prog-cards { display: flex; flex-direction: column; gap: 1.25rem; }
+    .prog-card {
+      display: flex; gap: 1.25rem; align-items: flex-start;
+      padding: 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border); border-radius: 16px;
+      transition: transform 0.4s var(--transition), box-shadow 0.4s ease,
+                  border-color 0.3s ease;
+    }
+    .prog-card:hover {
+      transform: translateX(6px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      border-color: rgba(5,150,105,0.3);
+    }
+    .prog-card-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 700; line-height: 1;
+      background: linear-gradient(135deg, var(--purple), var(--emerald));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      flex-shrink: 0;
+    }
+    .prog-card-body h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem; font-weight: 600; margin-bottom: 0.35rem;
+    }
+    .prog-card-body p { font-size: 0.83rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ─── METODOLOGÍA ──────────────────────────────────────────── */
+    #metodologia {
+      background: linear-gradient(to bottom, transparent, rgba(76,29,149,0.04) 50%, transparent);
+    }
+    .meto-header { text-align: center; margin-bottom: 4rem; }
+    .meto-steps {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 0; position: relative;
+    }
+    .meto-steps::before {
+      content: ''; position: absolute;
+      top: 44px; left: calc(16.66% + 2rem); right: calc(16.66% + 2rem);
+      height: 1px;
+      background: linear-gradient(to right, var(--purple), var(--emerald));
+    }
+    .meto-step {
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; padding: 0 2rem;
+    }
+    .meto-step-num {
+      width: 88px; height: 88px; border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; font-weight: 700;
+      background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(5,150,105,0.15));
+      margin-bottom: 1.5rem;
+      position: relative; z-index: 1;
+      transition: transform 0.4s var(--transition), box-shadow 0.4s ease;
+    }
+    .meto-step:hover .meto-step-num {
+      transform: scale(1.1);
+      box-shadow: 0 0 40px rgba(124,58,237,0.3);
+    }
+    .meto-step h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem; font-weight: 600; margin-bottom: 0.6rem;
+    }
+    .meto-step p { font-size: 0.83rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ─── FACILITADORES ────────────────────────────────────────── */
+    #facilitadores {
+      padding: 6rem 2rem;
+      background: radial-gradient(ellipse 60% 40% at 50% 100%, rgba(76,29,149,0.1) 0%, transparent 70%);
+    }
+    .facil-header { text-align: center; margin-bottom: 3rem; }
+    .facil-card {
+      max-width: 680px; margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border); border-radius: 24px;
+      padding: 3rem; text-align: center;
+      position: relative; overflow: hidden;
+      transition: transform 0.4s var(--transition), box-shadow 0.4s ease;
+    }
+    .facil-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(124,58,237,0.2);
+    }
+    .facil-card-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(124,58,237,0.1), transparent 60%);
+      pointer-events: none;
+    }
+    .facil-avatar {
+      width: 100px; height: 100px; border-radius: 50%;
+      margin: 0 auto 1.5rem;
+      background: linear-gradient(135deg, var(--purple-dark), var(--emerald));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem; font-weight: 700; color: white;
+      position: relative; z-index: 1;
+    }
+    .facil-name {
+      font-size: 1.4rem; font-weight: 700; margin-bottom: 0.35rem;
+      position: relative; z-index: 1;
+    }
+    .facil-role {
+      font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--purple); margin-bottom: 1.25rem;
+      position: relative; z-index: 1;
+    }
+    .facil-bio {
+      font-size: 0.9rem; color: var(--text-muted); line-height: 1.75;
+      position: relative; z-index: 1;
+    }
+    .facil-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      margin-top: 1.25rem; padding: 0.4rem 0.9rem;
+      background: rgba(5,150,105,0.1);
+      border: 1px solid rgba(5,150,105,0.3);
+      border-radius: 100px;
+      font-size: 0.72rem; letter-spacing: 0.08em; color: #6EE7B7;
+      position: relative; z-index: 1;
+    }
+
+    /* ─── CTA FINAL ────────────────────────────────────────────── */
+    #cta {
+      padding: 10rem 2rem;
+      text-align: center;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 50%, rgba(76,29,149,0.2) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 80% 80%, rgba(5,78,59,0.15) 0%, transparent 60%);
+    }
+    .cta-label {
+      font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 1.25rem;
+    }
+    .cta-title {
+      font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 700;
+      line-height: 1.15; margin-bottom: 1.5rem;
+    }
+    .cta-highlight {
+      background: linear-gradient(135deg, #C4B5FD 0%, #6EE7B7 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cta-sub {
+      font-size: 1rem; color: var(--text-muted); max-width: 480px;
+      margin: 0 auto 2.5rem; line-height: 1.75;
+    }
+    .cta-form {
+      display: flex; gap: 0.75rem; justify-content: center;
+      flex-wrap: wrap; max-width: 500px; margin: 0 auto 2rem;
+    }
+    .cta-input {
+      flex: 1; min-width: 240px;
+      padding: 0.9rem 1.4rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border); border-radius: 100px;
+      color: var(--text); font-size: 0.9rem; font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+    }
+    .cta-input:focus {
+      border-color: rgba(124,58,237,0.6);
+      background: rgba(124,58,237,0.05);
+      box-shadow: 0 0 0 4px rgba(124,58,237,0.1);
+    }
+    .cta-input::placeholder { color: var(--text-muted); }
+    .cta-contact {
+      display: flex; gap: 1.25rem; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 2rem;
+    }
+    .cta-contact-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1.1rem 1.75rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border); border-radius: 16px;
+      text-decoration: none; color: var(--text);
+      transition: transform 0.3s var(--transition),
+                  box-shadow 0.3s ease, border-color 0.3s ease,
+                  background 0.3s ease;
+      min-width: 280px;
+    }
+    .cta-contact-item:hover {
+      transform: translateY(-4px);
+      border-color: rgba(124,58,237,0.4);
+      background: rgba(124,58,237,0.07);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+    }
+    .cta-contact-item:last-child:hover {
+      border-color: rgba(5,150,105,0.4);
+      background: rgba(5,150,105,0.07);
+    }
+    .cta-contact-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(124,58,237,0.15);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--purple); flex-shrink: 0;
+    }
+    .cta-icon-green { background: rgba(5,150,105,0.15); color: var(--emerald-light); }
+    .cta-contact-text { display: flex; flex-direction: column; gap: 0.2rem; text-align: left; }
+    .cta-contact-label { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+    .cta-contact-value { font-size: 0.92rem; font-weight: 500; }
+
+    .cta-trust {
+      display: flex; align-items: center; justify-content: center;
+      gap: 1.5rem; flex-wrap: wrap;
+      font-size: 0.75rem; color: var(--text-muted);
+    }
+    .cta-trust-item { display: flex; align-items: center; gap: 0.35rem; }
+    .cta-trust-icon { font-size: 0.85rem; }
+
+    /* ─── FOOTER ───────────────────────────────────────────────── */
+    footer {
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--border);
+      display: flex; flex-direction: column; align-items: center;
+      gap: 1rem; text-align: center;
+    }
+    .footer-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      background: linear-gradient(90deg, var(--purple), var(--emerald));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .footer-reg {
+      font-size: 0.68rem; color: var(--text-muted); letter-spacing: 0.05em;
+      max-width: 520px; line-height: 1.7;
+    }
+    .footer-copy { font-size: 0.7rem; color: rgba(255,255,255,0.2); }
+
+    /* ─── KEYFRAMES ────────────────────────────────────────────── */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── PARTICLES BACKGROUND ─────────────────────────────────── */
+    #particles {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      overflow: hidden;
+    }
+    .particle {
+      position: absolute; border-radius: 50%;
+      background: var(--purple);
+      opacity: 0.12;
+      animation: particle-float linear infinite;
+    }
+
+    /* ─── RESPONSIVE ───────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .diag-grid, .prog-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .meto-steps { grid-template-columns: 1fr; gap: 3rem; }
+      .meto-steps::before { display: none; }
+      .scale-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+
+    /* ─── GRADIENT BORDER ANIMATION (cards) ───────────────────── */
+    .glow-border {
+      position: relative;
+    }
+    .glow-border::after {
+      content: ''; position: absolute; inset: -1px;
+      border-radius: inherit; padding: 1px;
+      background: linear-gradient(135deg, rgba(124,58,237,0), rgba(124,58,237,0.5), rgba(5,150,105,0.5), rgba(5,150,105,0));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      opacity: 0; transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+    .glow-border:hover::after { opacity: 1; }
+
+    /* ─── MOUSE PARALLAX CONTAINER ─────────────────────────────── */
+    .mouse-parallax-layer { will-change: transform; }
+  </style>
+</head>
+<body>
+
+  <!-- Particles background -->
+  <div id="particles"></div>
+
+  <!-- Custom cursor -->
+  <div id="cursor-outer"></div>
+  <div id="cursor-dot"></div>
+
+  <!-- ═══ NAVIGATION ═══════════════════════════════════════════ -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">
+      <img src="img/logo.png" alt="NICOMACO Clínica de Contacto">
+      <div class="nav-logo-text">
+        <span class="nav-logo-brand">NICÓMACO</span>
+        <span class="nav-logo-sub">Clínica de Contacto®</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#diagnostico">Diagnóstico</a></li>
+      <li><a href="#escala">La Escala</a></li>
+      <li><a href="#programa">Programa</a></li>
+      <li><a href="#metodologia">Metodología</a></li>
+    </ul>
+    <a href="./platform.html" class="btn-nav magnetic">Quiero iniciar</a>
+  </nav>
+
+  <!-- ═══ HERO ══════════════════════════════════════════════════ -->
+  <section id="hero">
+    <div id="hero-video-wrap">
+      <!--
+        VIDEO: Descarga desde https://www.pexels.com y reemplaza el src.
+        Busca: "couple silhouette sunset" o "woman walking freedom nature"
+        Ejemplo de URL directa: src="video/hero.mp4"
+      -->
+      <video id="hero-video"
+        muted playsinline preload="auto"
+        src="video/hero.mp4"
+        poster="video/hero.webp">
+      </video>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content" id="hero-content">
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        Programa Psicológico Certificado
+      </div>
+      <h1 class="hero-title mouse-parallax-layer">
+        <span class="hero-title-zero">Cero Amor</span>
+        <span class="hero-title-arrow">hacia el</span>
+        <span class="hero-title-agape">Amor Ágape</span>
+      </h1>
+      <p class="hero-subtitle">
+        Reconoce las señales de violencia en tu relación y
+        transforma tu vida hacia el amor verdadero, sano y libre.
+      </p>
+      <div class="hero-cta-group">
+        <a href="./platform.html" class="btn-primary magnetic">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Iniciar mi diagnóstico
+        </a>
+        <a href="#escala" class="btn-secondary magnetic">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          Ver la escala
+        </a>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Desplaza</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ═══ STATS ═════════════════════════════════════════════════ -->
+  <div id="stats">
+    <div class="container">
+      <div class="stats-grid reveal">
+        <div class="stat-item">
+          <div class="stat-number">+2,000</div>
+          <div class="stat-label">Personas impactadas</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">18</div>
+          <div class="stat-label">Señales identificadas</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">92%</div>
+          <div class="stat-label">Reportan mejora notable</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">2021</div>
+          <div class="stat-label">Programa registrado</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ DIAGNÓSTICO ═══════════════════════════════════════════ -->
+  <section id="diagnostico">
+    <div class="container">
+      <div class="diag-grid">
+        <div class="reveal">
+          <p class="section-eyebrow">El Problema</p>
+          <h2 class="section-title">¿Estás viviendo en<br><em>Cero Amor</em>?</h2>
+          <p class="section-subtitle">
+            Muchas personas viven atrapadas en relaciones donde el amor
+            se ha convertido en control, miedo o dolor — sin saberlo.
+            El primer paso es reconocerlo.
+          </p>
+          <div style="margin-top:2rem; display:flex; flex-direction:column; gap:1rem;">
+            <div style="display:flex; align-items:center; gap:0.75rem; font-size:0.88rem; color:var(--text-muted);">
+              <span style="width:32px;height:32px;border-radius:50%;background:rgba(124,58,237,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.75rem;">✓</span>
+              Identifica los patrones de violencia en tu relación
+            </div>
+            <div style="display:flex; align-items:center; gap:0.75rem; font-size:0.88rem; color:var(--text-muted);">
+              <span style="width:32px;height:32px;border-radius:50%;background:rgba(124,58,237,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.75rem;">✓</span>
+              Comprende dónde te encuentras en la escala
+            </div>
+            <div style="display:flex; align-items:center; gap:0.75rem; font-size:0.88rem; color:var(--text-muted);">
+              <span style="width:32px;height:32px;border-radius:50%;background:rgba(124,58,237,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.75rem;">✓</span>
+              Inicia el camino hacia relaciones sanas
+            </div>
+          </div>
+        </div>
+        <div class="diag-visual reveal" style="transition-delay:0.2s;">
+          <div class="diag-card glow-border">
+            <div class="diag-card-glow"></div>
+            <div class="diag-card-top">
+              <div class="diag-card-icon">🔍</div>
+              <div class="diag-card-title">Señales de Alerta</div>
+            </div>
+            <ul class="diag-signals">
+              <li>Sientes que necesitas pedir permiso para tomar decisiones propias</li>
+              <li>Tu pareja te desvaloriza, ridiculiza o ignora con frecuencia</li>
+              <li>Experimentas miedo ante sus reacciones emocionales</li>
+              <li>Justificas conductas que dañan tu bienestar emocional o físico</li>
+              <li>Te aíslas de amigos y familia por "evitar problemas"</li>
+              <li>Sientes que nada de lo que haces es suficiente</li>
+            </ul>
+            <div class="diag-float">
+              ⚠️ Si te identificas con más de 3,<br>es momento de actuar
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ESCALA / AUTOVIOLENTÓMETRO ═══════════════════════════ -->
+  <section id="escala">
+    <div class="container">
+      <div class="scale-header reveal">
+        <p class="section-eyebrow">Herramienta Diagnóstica</p>
+        <h2 class="section-title">El Autoviolentómetro</h2>
+        <p class="section-subtitle" style="margin:0 auto;">
+          Una escala que va del extremo de la violencia hacia el amor
+          pleno. ¿En dónde te encuentras hoy?
+        </p>
+      </div>
+      <div class="scale-container reveal" style="transition-delay:0.2s;">
+        <div class="scale-header-row">
+          <div class="scale-side-label">
+            <span class="scale-side-name zero">Cero Amor</span>
+            <span class="scale-side-desc">Autoviolentómetro · Zona de riesgo</span>
+          </div>
+          <div class="scale-divider-icon">⚡</div>
+          <div class="scale-side-label right">
+            <span class="scale-side-name agape">Amor Ágape</span>
+            <span class="scale-side-desc">Zona de bienestar · El amor también se trabaja</span>
+          </div>
+        </div>
+        <div class="scale-track" id="scale-track"></div>
+        <div class="scale-grid">
+          <div class="scale-col">
+            <div class="scale-item zero-item">
+              <span class="scale-item-num">1</span>
+              <span>Me hier·o/criti·co — La autoviolencia también se mide</span>
+            </div>
+            <div class="scale-item zero-item">
+              <span class="scale-item-num">2</span>
+              <span>Me presion·o/capaci·to de forma dañina</span>
+            </div>
+            <div class="scale-item zero-item">
+              <span class="scale-item-num">3</span>
+              <span>Me miento/oculto mis verdaderas necesidades</span>
+            </div>
+            <div class="scale-item zero-item">
+              <span class="scale-item-num">4</span>
+              <span>Me ignoro/me llamo</span>
+            </div>
+            <div class="scale-item zero-item">
+              <span class="scale-item-num">5</span>
+              <span>Me desacredito/desvalorizo constantemente</span>
+            </div>
+            <div class="scale-item zero-item">
+              <span class="scale-item-num">6</span>
+              <span>Me pongo en ridículo/me minimizo</span>
+            </div>
+            <div class="scale-item zero-item">
+              <span class="scale-item-num">7</span>
+              <span>Me culpo/responsabilizo de todo sin evidencia</span>
+            </div>
+            <div class="scale-item zero-item">
+              <span class="scale-item-num">8</span>
+              <span>Me intimido/atemorizo con mis propios pensamientos</span>
+            </div>
+            <div class="scale-item zero-item">
+              <span class="scale-item-num">9</span>
+              <span>Destruyo mis logros, arte, propiedades personales</span>
+            </div>
+          </div>
+          <div class="scale-col">
+            <div class="scale-item agape-item">
+              <span class="scale-item-num">1</span>
+              <span>Crítica constructiva — Reconozco mis áreas de mejora</span>
+            </div>
+            <div class="scale-item agape-item">
+              <span class="scale-item-num">2</span>
+              <span>Atender y comunicar mis necesidades con asertividad</span>
+            </div>
+            <div class="scale-item agape-item">
+              <span class="scale-item-num">3</span>
+              <span>Confiar, Valorar — Reconocer mis capacidades</span>
+            </div>
+            <div class="scale-item agape-item">
+              <span class="scale-item-num">4</span>
+              <span>Validar mis emociones y experiencias vitales</span>
+            </div>
+            <div class="scale-item agape-item">
+              <span class="scale-item-num">5</span>
+              <span>Responsabilidad compartida · Amor propio genuino</span>
+            </div>
+            <div class="scale-item agape-item">
+              <span class="scale-item-num">6</span>
+              <span>Cuidar artículos personales · Fortalecer y fiscalizar</span>
+            </div>
+            <div class="scale-item agape-item">
+              <span class="scale-item-num">7</span>
+              <span>Comunicar desde el amor · Acto de bondad</span>
+            </div>
+            <div class="scale-item agape-item">
+              <span class="scale-item-num">8</span>
+              <span>Libertad y autonomía · Producir y compartir</span>
+            </div>
+            <div class="scale-item agape-item">
+              <span class="scale-item-num">9</span>
+              <span>Amor Ágape — Amor pleno, maduro y transformador</span>
+            </div>
+          </div>
+        </div>
+        <div class="scale-cta">
+          <p>¿En qué punto de la escala te encuentras hoy?</p>
+          <a href="./platform.html" class="btn-primary magnetic" style="display:inline-flex;">
+            Hacer mi diagnóstico gratuito
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ HERRAMIENTAS DE EVALUACIÓN ════════════════════════════ -->
+  <section id="herramientas" style="padding: 6rem 2rem; background: rgba(255, 255, 255, 0.01); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+      <div style="text-align: center; margin-bottom: 4rem;" class="reveal">
+        <p class="section-eyebrow">Diagnósticos Disponibles</p>
+        <h2 class="section-title" style="font-size: 2.5rem; margin-bottom: 0.75rem;">Tres herramientas para visibilizar tu realidad</h2>
+        <p class="section-subtitle" style="margin: 0 auto; font-size: 1rem; max-width: 600px;">
+          En nuestra plataforma digital podrás realizar evaluaciones de manera gratuita, confidencial y obtener pautas de acción inmediatas basadas en el modelo clínico.
+        </p>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;" class="reveal">
+        <!-- Card 1 -->
+        <div class="prog-card glow-border" style="padding: 2.2rem; display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+          <div>
+            <div style="font-size: 2rem; margin-bottom: 1rem; filter: drop-shadow(0 0 10px rgba(124, 58, 237, 0.4));">⚡</div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; font-family: 'Playfair Display', serif;">Autoviolentómetro</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem;">
+              <strong>Cero Amor</strong>: Mide las manifestaciones de autoviolencia física, psicológica y emocional autoinfligida en tu diálogo interno y valía personal.
+            </p>
+          </div>
+          <a href="./platform.html" class="btn-secondary magnetic" style="font-size: 0.78rem; padding: 0.6rem 1.2rem; text-align: center; width: 100%; border-radius: 100px; text-decoration: none;">Iniciar Autoviolentómetro</a>
+        </div>
+        
+        <!-- Card 2 -->
+        <div class="prog-card glow-border" style="padding: 2.2rem; display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+          <div>
+            <div style="font-size: 2rem; margin-bottom: 1rem; filter: drop-shadow(0 0 10px rgba(220, 38, 38, 0.4));">⚖️</div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; font-family: 'Playfair Display', serif;">Violentómetro Vicario</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem;">
+              <strong>Cero Amor Paternal</strong>: Mide y detecta las conductas de violencia vicaria ejercidas por el padre hacia los hijos con el fin de dañar emocionalmente a la madre.
+            </p>
+          </div>
+          <a href="./platform.html" class="btn-secondary magnetic" style="font-size: 0.78rem; padding: 0.6rem 1.2rem; text-align: center; width: 100%; border-radius: 100px; text-decoration: none;">Iniciar Diagnóstico Vicario</a>
+        </div>
+        
+        <!-- Card 3 -->
+        <div class="prog-card glow-border" style="padding: 2.2rem; display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+          <div>
+            <div style="font-size: 2rem; margin-bottom: 1rem; filter: drop-shadow(0 0 10px rgba(5, 150, 105, 0.4));">🌿</div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; font-family: 'Playfair Display', serif;">Amorómetro</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem;">
+              <strong>Amor Ágape</strong>: Mide tu desarrollo en el amor propio incondicional y tu capacidad constructiva para brindar cuidado y sostener relaciones sanas.
+            </p>
+          </div>
+          <a href="./platform.html" class="btn-secondary magnetic" style="font-size: 0.78rem; padding: 0.6rem 1.2rem; text-align: center; width: 100%; border-radius: 100px; text-decoration: none;">Iniciar Amorómetro</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PROGRAMA ══════════════════════════════════════════════ -->
+  <section id="programa">
+    <div class="container">
+      <div class="prog-grid">
+        <div class="reveal">
+          <p class="section-eyebrow">El Programa</p>
+          <h2 class="section-title">Lo que aprenderás<br>y transformarás</h2>
+          <p class="section-subtitle">
+            Un programa estructurado, con herramientas prácticas,
+            diseñado para acompañarte en cada etapa del proceso.
+          </p>
+          <a href="#cta" class="btn-primary magnetic" style="display:inline-flex;margin-top:2rem;">
+            Ver temario completo →
+          </a>
+        </div>
+        <div class="prog-cards reveal" style="transition-delay:0.2s;">
+          <div class="prog-card glow-border">
+            <div class="prog-card-num">01</div>
+            <div class="prog-card-body">
+              <h3>Reconocimiento y conciencia</h3>
+              <p>Identifica los patrones de violencia, las dinámicas tóxicas y los detonantes emocionales que sostienen el ciclo del Cero Amor.</p>
+            </div>
+          </div>
+          <div class="prog-card glow-border">
+            <div class="prog-card-num">02</div>
+            <div class="prog-card-body">
+              <h3>Herramientas de intervención</h3>
+              <p>El Autoviolentómetro, la Guía Rápida y técnicas de regulación emocional para tomar decisiones desde la claridad.</p>
+            </div>
+          </div>
+          <div class="prog-card glow-border">
+            <div class="prog-card-num">03</div>
+            <div class="prog-card-body">
+              <h3>Construcción del Amor Ágape</h3>
+              <p>Modelos de comunicación asertiva, límites sanos, y la práctica diaria del amor que transforma personas y relaciones.</p>
+            </div>
+          </div>
+          <div class="prog-card glow-border">
+            <div class="prog-card-num">04</div>
+            <div class="prog-card-body">
+              <h3>Plan de vida integrado</h3>
+              <p>Cierre con un mapa de bienestar personal, red de apoyo y acciones concretas para sostener el cambio a largo plazo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ METODOLOGÍA ═══════════════════════════════════════════ -->
+  <section id="metodologia">
+    <div class="container">
+      <div class="meto-header reveal">
+        <p class="section-eyebrow">Cómo funciona</p>
+        <h2 class="section-title">Tres etapas de transformación</h2>
+      </div>
+      <div class="meto-steps reveal" style="transition-delay:0.15s;">
+        <div class="meto-step">
+          <div class="meto-step-num">I</div>
+          <h3>Diagnóstico</h3>
+          <p>Aplicamos el Autoviolentómetro y evaluamos tu situación actual con un facilitador certificado.</p>
+        </div>
+        <div class="meto-step">
+          <div class="meto-step-num">II</div>
+          <h3>Intervención</h3>
+          <p>Sesiones grupales e individuales donde trabajamos herramientas, narrativas y nuevos patrones de relación.</p>
+        </div>
+        <div class="meto-step">
+          <div class="meto-step-num">III</div>
+          <h3>Integración</h3>
+          <p>Consolidamos los cambios con seguimiento, recursos descargables y comunidad de apoyo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FACILITADORES ══════════════════════════════════════════ -->
+  <section id="facilitadores">
+    <div class="container">
+      <div class="facil-header reveal">
+        <p class="section-eyebrow">El equipo</p>
+        <h2 class="section-title">Facilitadores certificados</h2>
+      </div>
+      <div class="facil-card reveal glow-border" style="transition-delay:0.2s;">
+        <div class="facil-card-glow"></div>
+        <div class="facil-avatar">N</div>
+        <div class="facil-name">NICOMACO</div>
+        <div class="facil-role">Clínica de Cambio · Equipo de Psicología</div>
+        <p class="facil-bio">
+          Somos un equipo de psicólogos y facilitadores especializados en
+          violencia en el noviazgo, autoestima y relaciones sanas.
+          Nuestro programa "Cero Amor vs Amor Ágape" está registrado y
+          avalado, con más de 2,000 personas acompañadas en su proceso
+          de transformación personal.
+        </p>
+        <div class="facil-badge">
+          ✦ Reg. 03-2025-013101400100-01 · INDAUTOR
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CTA FINAL ═════════════════════════════════════════════ -->
+  <section id="cta">
+    <div class="container">
+      <p class="cta-label reveal">El cambio empieza hoy</p>
+      <h2 class="cta-title reveal" style="transition-delay:0.1s;">
+        <span class="cta-highlight">Inicia tu camino</span><br>
+        hacia el Amor Ágape
+      </h2>
+      <p class="cta-sub reveal" style="transition-delay:0.2s;">
+        Escríbenos o llámanos directamente. Un facilitador certificado
+        te acompañará en tu diagnóstico sin costo.
+      </p>
+
+      <!-- Contacto directo -->
+      <div class="cta-contact reveal" style="transition-delay:0.3s;">
+        <a href="mailto:Blancaestelaangulo0@gmail.com" class="cta-contact-item magnetic">
+          <span class="cta-contact-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          </span>
+          <span class="cta-contact-text">
+            <span class="cta-contact-label">Correo electrónico</span>
+            <span class="cta-contact-value">Blancaestelaangulo0@gmail.com</span>
+          </span>
+        </a>
+        <a href="https://wa.me/526671003828" target="_blank" class="cta-contact-item magnetic">
+          <span class="cta-contact-icon cta-icon-green">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.004 2C6.486 2 2 6.486 2 12.004c0 1.77.463 3.433 1.27 4.888L2.05 21.95l5.226-1.198A9.953 9.953 0 0 0 12.004 22c5.518 0 9.996-4.478 9.996-9.996S17.522 2 12.004 2zm0 18.172a8.164 8.164 0 0 1-4.162-1.14l-.299-.177-3.1.712.733-3.019-.195-.308A8.163 8.163 0 0 1 3.828 12c0-4.508 3.668-8.172 8.176-8.172 4.508 0 8.168 3.664 8.168 8.172 0 4.512-3.66 8.172-8.168 8.172z"/></svg>
+          </span>
+          <span class="cta-contact-text">
+            <span class="cta-contact-label">WhatsApp / Teléfono</span>
+            <span class="cta-contact-value">+52 1 667 100 3828</span>
+          </span>
+        </a>
+      </div>
+
+      <div class="cta-trust reveal" style="transition-delay:0.45s;">
+        <span class="cta-trust-item">
+          <span class="cta-trust-icon">🔒</span> Información confidencial
+        </span>
+        <span class="cta-trust-item">
+          <span class="cta-trust-icon">✓</span> Sin costo inicial
+        </span>
+        <span class="cta-trust-item">
+          <span class="cta-trust-icon">⚡</span> Respuesta en 24 h
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═════════════════════════════════════════════════ -->
+  <footer>
+    <img src="img/logo.png" alt="NICÓMACO" style="height:64px;width:auto;opacity:0.85;margin-bottom:0.5rem;">
+    <div class="footer-brand">NICÓMACO · Clínica de Contacto®</div>
+    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin:0.75rem 0;">
+      <a href="mailto:Blancaestelaangulo0@gmail.com" style="color:var(--text-muted);font-size:0.8rem;text-decoration:none;display:flex;align-items:center;gap:0.4rem;transition:color 0.3s ease;" onmouseover="this.style.color='#C4B5FD'" onmouseout="this.style.color='rgba(248,248,255,0.5)'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        Blancaestelaangulo0@gmail.com
+      </a>
+      <a href="https://wa.me/526671003828" target="_blank" style="color:var(--text-muted);font-size:0.8rem;text-decoration:none;display:flex;align-items:center;gap:0.4rem;transition:color 0.3s ease;" onmouseover="this.style.color='#6EE7B7'" onmouseout="this.style.color='rgba(248,248,255,0.5)'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.004 2C6.486 2 2 6.486 2 12.004c0 1.77.463 3.433 1.27 4.888L2.05 21.95l5.226-1.198A9.953 9.953 0 0 0 12.004 22c5.518 0 9.996-4.478 9.996-9.996S17.522 2 12.004 2zm0 18.172a8.164 8.164 0 0 1-4.162-1.14l-.299-.177-3.1.712.733-3.019-.195-.308A8.163 8.163 0 0 1 3.828 12c0-4.508 3.668-8.172 8.176-8.172 4.508 0 8.168 3.664 8.168 8.172 0 4.512-3.66 8.172-8.168 8.172z"/></svg>
+        +52 1 667 100 3828
+      </a>
+    </div>
+    <p class="footer-reg">
+      Programa "Cero Amor vs Amor Ágape" · Herramientas registradas ante INDAUTOR<br>
+      Reg. 03-2025-013101400100-01 · Todos los derechos reservados
+    </p>
+    <p class="footer-copy">© 2025 NICÓMACO · Diseñado con propósito</p>
+  </footer>
+
+  <!-- ═══════════════════ JAVASCRIPT ════════════════════════════ -->
+  <script>
+  (function () {
+    'use strict';
+
+    /* ── 1. CUSTOM CURSOR ──────────────────────────────────────── */
+    const cursorOuter = document.getElementById('cursor-outer');
+    const cursorDot   = document.getElementById('cursor-dot');
+    let mouseX = 0, mouseY = 0;
+    let outerX = 0, outerY = 0;
+
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top  = mouseY + 'px';
+    });
+
+    function animateCursor() {
+      outerX += (mouseX - outerX) * 0.12;
+      outerY += (mouseY - outerY) * 0.12;
+      cursorOuter.style.left = outerX + 'px';
+      cursorOuter.style.top  = outerY + 'px';
+      requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    document.querySelectorAll('a, button, .prog-card, .diag-card, .scale-item, .facil-card').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+    });
+
+    /* ── 2. MAGNETIC BUTTONS ───────────────────────────────────── */
+    document.querySelectorAll('.magnetic').forEach(el => {
+      el.addEventListener('mousemove', e => {
+        const rect  = el.getBoundingClientRect();
+        const cx    = rect.left + rect.width / 2;
+        const cy    = rect.top  + rect.height / 2;
+        const dx    = (e.clientX - cx) * 0.3;
+        const dy    = (e.clientY - cy) * 0.3;
+        el.style.transform = `translate(${dx}px, ${dy}px)`;
+      });
+      el.addEventListener('mouseleave', () => {
+        el.style.transform = '';
+      });
+    });
+
+    /* ── 3. VIDEO PARALLAX (scroll avanza / retrocede tiempo) ──── */
+    const heroSection = document.getElementById('hero');
+    const videoWrap   = document.getElementById('hero-video-wrap');
+    const video       = document.getElementById('hero-video');
+    let lastScroll    = 0;
+    let ticking       = false;
+
+    function updateVideoParallax() {
+      const scrollY  = window.scrollY;
+      const heroH    = heroSection.offsetHeight;
+
+      /* Parallax transform: el video se mueve más lento que el scroll */
+      const progress = Math.min(scrollY / heroH, 1);
+      const scale    = 1 + progress * 0.18;          // zoom in suave
+      const translateY = progress * 70;              // sube lento
+      videoWrap.style.transform = `scale(${scale}) translateY(-${translateY}px)`;
+
+      /* Control de tiempo del video según scroll */
+      if (video.readyState >= 2 && video.duration) {
+        const maxScroll = heroH * 0.8;
+        const timeProg  = Math.max(0, Math.min(scrollY / maxScroll, 1));
+        try {
+          video.currentTime = timeProg * video.duration;
+        } catch(e) {}
+      }
+
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(updateVideoParallax);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    /* ── 4. NAV ON SCROLL ──────────────────────────────────────── */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    /* ── 5. MOUSE PARALLAX EN HERO CONTENT ────────────────────── */
+    const heroContent = document.getElementById('hero-content');
+    document.addEventListener('mousemove', e => {
+      if (window.scrollY > window.innerHeight * 0.3) return;
+      const rx = (e.clientX / window.innerWidth  - 0.5) * 24;
+      const ry = (e.clientY / window.innerHeight - 0.5) * 16;
+      heroContent.style.transform = `translate(${rx * 0.4}px, ${ry * 0.4}px)`;
+    });
+
+    /* ── 6. SCROLL REVEAL ──────────────────────────────────────── */
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    /* ── 7. STAGGERED CHILDREN ─────────────────────────────────── */
+    document.querySelectorAll('.prog-cards, .scale-col, .diag-signals').forEach(parent => {
+      const kids = parent.children;
+      Array.from(kids).forEach((child, i) => {
+        child.style.transitionDelay = (i * 80) + 'ms';
+        child.classList.add('reveal');
+        revealObserver.observe(child);
+      });
+    });
+
+    /* ── 8. PARTICLES ──────────────────────────────────────────── */
+    const particleContainer = document.getElementById('particles');
+    const colors = ['rgba(124,58,237,0.15)', 'rgba(5,150,105,0.1)', 'rgba(196,181,253,0.1)'];
+
+    for (let i = 0; i < 22; i++) {
+      const p   = document.createElement('div');
+      p.className = 'particle';
+      const size  = Math.random() * 5 + 2;
+      const x     = Math.random() * 100;
+      const dur   = Math.random() * 30 + 20;
+      const delay = Math.random() * -30;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      p.style.cssText = `
+        width:${size}px; height:${size}px;
+        left:${x}%;
+        top:${Math.random() * 100}%;
+        background:${color};
+        animation-duration:${dur}s;
+        animation-delay:${delay}s;
+        animation-name: particle-float-${i % 3};
+      `;
+      particleContainer.appendChild(p);
+    }
+
+    /* Keyframes for particles (injected dynamically) */
+    const particleStyle = document.createElement('style');
+    particleStyle.textContent = `
+      @keyframes particle-float-0 {
+        0%   { transform: translate(0, 0) scale(1);   opacity: 0.08; }
+        33%  { transform: translate(40px, -60px) scale(1.2); opacity: 0.15; }
+        66%  { transform: translate(-30px, -120px) scale(0.9); opacity: 0.06; }
+        100% { transform: translate(10px, -200px) scale(1); opacity: 0; }
+      }
+      @keyframes particle-float-1 {
+        0%   { transform: translate(0, 0);    opacity: 0.1; }
+        50%  { transform: translate(-50px, -100px); opacity: 0.12; }
+        100% { transform: translate(20px, -180px); opacity: 0; }
+      }
+      @keyframes particle-float-2 {
+        0%   { transform: translate(0, 0) rotate(0deg);   opacity: 0.08; }
+        50%  { transform: translate(60px, -80px) rotate(180deg); opacity: 0.14; }
+        100% { transform: translate(-20px, -160px) rotate(360deg); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(particleStyle);
+
+    /* ── 9. SCALE TRACK ANIMATED INDICATOR ────────────────────── */
+    const scaleTrack = document.getElementById('scale-track');
+    if (scaleTrack) {
+      const indicator = document.createElement('div');
+      indicator.style.cssText = `
+        position:absolute; top:50%; left:0; width:18px; height:18px;
+        background:white; border-radius:50%;
+        transform:translate(-50%,-50%);
+        box-shadow:0 0 12px rgba(255,255,255,0.6), 0 0 24px rgba(124,58,237,0.5);
+        transition:left 0.4s cubic-bezier(0.16,1,0.3,1);
+        pointer-events:none;
+      `;
+      scaleTrack.appendChild(indicator);
+
+      scaleTrack.addEventListener('click', e => {
+        const rect = scaleTrack.getBoundingClientRect();
+        const pct  = ((e.clientX - rect.left) / rect.width) * 100;
+        indicator.style.left = pct + '%';
+      });
+    }
+
+    /* ── 10. SMOOTH ANCHOR SCROLLING ───────────────────────────── */
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', e => {
+        const target = document.querySelector(link.getAttribute('href'));
+        if (!target) return;
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    /* ── 11. VIDEO SETUP & FALLBACK ────────────────────────────── */
+    video.addEventListener('error', () => {
+      videoWrap.style.background = 'linear-gradient(135deg, #4C1D95 0%, #07070F 50%, #064E3B 100%)';
+    });
+
+    /* Play once to load frames, then pause at t=0 for scroll-scrubbing */
+    function initVideo() {
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          video.pause();
+          video.currentTime = 0;
+        }).catch(() => {
+          /* Autoplay blocked — poster image shows, parallax still works via CSS transform */
+        });
+      }
+    }
+
+    if (video.readyState >= 3) {
+      initVideo();
+    } else {
+      video.addEventListener('canplay', initVideo, { once: true });
+    }
+
+  })();
+  </script>
+</body>
+</html>

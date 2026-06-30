@@ -1,0 +1,6 @@
+{
+  "name": "Cero Amor vs Amor Ágape",
+  "description": "Herramienta clínica de diagnóstico adaptativo y transición al amor propio incondicional de la Clínica NICÓMACO.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

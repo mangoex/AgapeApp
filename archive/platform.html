@@ -1,0 +1,2119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plataforma de Diagnóstico | NICÓMACO Clínica de Contacto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ─── RESET & VARIABES ─────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --purple:      #7C3AED;
+      --purple-dark: #4C1D95;
+      --purple-glow: rgba(124, 58, 237, 0.4);
+      --emerald:     #059669;
+      --emerald-light:#10B981;
+      --emerald-glow:rgba(5, 150, 105, 0.4);
+      --bg:          #07070F;
+      --bg-card:     rgba(255, 255, 255, 0.04);
+      --border:      rgba(255, 255, 255, 0.08);
+      --text:        #F8F8FF;
+      --text-muted:  rgba(248, 248, 255, 0.5);
+      --red:         #DC2626;
+      --red-glow:    rgba(220, 38, 38, 0.4);
+      --yellow:      #D97706;
+      --yellow-glow: rgba(217, 119, 6, 0.4);
+      --transition:  cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #07070F;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(76, 29, 149, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(5, 150, 105, 0.12) 0%, transparent 50%);
+      background-attachment: fixed;
+    }
+    h1, h2, h3 { font-family: 'Playfair Display', serif; }
+    button, input, select { font-family: 'Inter', sans-serif; }
+
+    /* ─── NAVIGATION ───────────────────────────────────────────── */
+    nav {
+      width: 100%;
+      padding: 1.25rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(7, 7, 15, 0.5);
+      backdrop-filter: blur(20px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+    .nav-logo img {
+      height: 40px;
+      width: auto;
+      filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.4));
+    }
+    .nav-logo-text { display: flex; flex-direction: column; }
+    .nav-logo-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem; font-weight: 700; letter-spacing: 0.08em;
+      background: linear-gradient(90deg, var(--purple) 0%, var(--emerald-light) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-logo-sub {
+      font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .nav-user {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .user-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      font-size: 0.82rem;
+    }
+    .user-avatar {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple), var(--emerald));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; font-weight: bold; color: white;
+    }
+    .btn-logout {
+      background: none; border: none; color: var(--text-muted);
+      font-size: 0.8rem; cursor: pointer; transition: color 0.3s ease;
+    }
+    .btn-logout:hover { color: var(--red); }
+
+    /* ─── APP WRAPPER ──────────────────────────────────────────── */
+    .app-container {
+      flex: 1;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    /* ─── GLASS CARD ───────────────────────────────────────────── */
+    .glass-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .glow-border {
+      position: relative;
+    }
+    .glow-border::after {
+      content: ''; position: absolute; inset: -1px;
+      border-radius: inherit; padding: 1px;
+      background: linear-gradient(135deg, rgba(124,58,237,0), rgba(124,58,237,0.4), rgba(5,150,105,0.4), rgba(5,150,105,0));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      opacity: 0.4; pointer-events: none;
+    }
+
+    /* ─── AUTHENTICATION VIEW ──────────────────────────────────── */
+    .auth-view {
+      max-width: 460px;
+      margin: 3rem auto;
+    }
+    .auth-toggle {
+      display: flex;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .auth-tab {
+      flex: 1; text-align: center; padding: 0.8rem;
+      background: none; border: none; color: var(--text-muted);
+      cursor: pointer; font-size: 0.95rem; font-weight: 500;
+      transition: color 0.3s ease, border-color 0.3s ease;
+      border-bottom: 2px solid transparent;
+    }
+    .auth-tab.active {
+      color: var(--text);
+      border-color: var(--purple);
+    }
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block; font-size: 0.8rem; letter-spacing: 0.05em;
+      text-transform: uppercase; color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .form-input {
+      width: 100%; padding: 0.8rem 1.2rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border); border-radius: 10px;
+      color: var(--text); font-size: 0.9rem; outline: none;
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+    .form-input:focus {
+      border-color: var(--purple);
+      background: rgba(124, 58, 237, 0.03);
+    }
+    .btn-submit {
+      width: 100%; padding: 0.9rem; margin-top: 1.5rem;
+      background: linear-gradient(135deg, var(--purple) 0%, #5B21B6 100%);
+      color: white; border: none; border-radius: 100px;
+      font-size: 0.92rem; font-weight: 600; cursor: pointer;
+      box-shadow: 0 10px 30px var(--purple-glow);
+      transition: transform 0.3s var(--transition), box-shadow 0.3s ease;
+    }
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px var(--purple-glow);
+    }
+    .auth-footer-note {
+      text-align: center; margin-top: 1.25rem; font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* ─── USER DASHBOARD ───────────────────────────────────────── */
+    .dashboard-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 2.5rem;
+    }
+    .dashboard-header h1 { font-size: 2.2rem; font-weight: 700; }
+    .dashboard-grid {
+      display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;
+    }
+    .section-title {
+      font-size: 1.4rem; font-weight: 600; margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .btn-action {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.8rem 1.6rem; border-radius: 100px;
+      font-size: 0.88rem; font-weight: 600; text-decoration: none;
+      cursor: pointer; border: none;
+      transition: transform 0.3s var(--transition), box-shadow 0.3s ease;
+    }
+    .btn-action.primary {
+      background: linear-gradient(135deg, var(--purple) 0%, #5B21B6 100%);
+      color: white; box-shadow: 0 10px 25px var(--purple-glow);
+    }
+    .btn-action.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px var(--purple-glow);
+    }
+    .btn-action.secondary {
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .btn-action.secondary:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .instruments-list {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .instrument-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border); border-radius: 16px;
+      padding: 2rem; display: flex; flex-direction: column;
+      justify-content: space-between; min-height: 220px;
+      transition: transform 0.3s var(--transition), border-color 0.3s ease;
+    }
+    .instrument-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--purple);
+    }
+    .instrument-meta { display: flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .instrument-name { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .instrument-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.5rem; }
+
+    /* History table */
+    .history-card { margin-top: 2rem; }
+    .table-container { width: 100%; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th, td { padding: 1rem; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.05em; }
+    tr:last-child td { border: none; }
+    .badge-zone {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.3rem 0.75rem; border-radius: 100px;
+      font-size: 0.72rem; font-weight: 600;
+    }
+    .badge-zone.verde { background: rgba(5, 150, 105, 0.15); color: #34D399; border: 1px solid rgba(5, 150, 105, 0.3); }
+    .badge-zone.amarilla { background: rgba(217, 119, 6, 0.15); color: #FBBF24; border: 1px solid rgba(217, 119, 6, 0.3); }
+    .badge-zone.roja { background: rgba(220, 38, 38, 0.15); color: #F87171; border: 1px solid rgba(220, 38, 38, 0.3); }
+    .badge-zone.critica { background: rgba(127, 29, 29, 0.3); color: #FFAAAA; border: 1px solid rgba(127, 29, 29, 0.5); }
+
+    /* Interactivity for critical alerts */
+    .critical-alert-row {
+      padding: 0.5rem 0.75rem;
+      margin: -0.25rem -0.375rem;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+    .critical-alert-row:hover {
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .critical-alert-row.active {
+      background: rgba(220, 38, 38, 0.12);
+      border-color: rgba(220, 38, 38, 0.35);
+    }
+
+    /* Filter pill */
+    .filter-pill {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(220, 38, 38, 0.15);
+      color: #F87171;
+      border: 1px solid rgba(220, 38, 38, 0.3);
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s, border-color 0.2s;
+      margin-left: 0.75rem;
+    }
+    .filter-pill:hover {
+      background: rgba(220, 38, 38, 0.25);
+      border-color: rgba(220, 38, 38, 0.5);
+    }
+
+    /* Suggestions card */
+    .suggestions-panel {
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .suggestion-box {
+      background: rgba(255, 255, 255, 0.01); border-left: 3px solid var(--purple);
+      padding: 1.25rem; border-radius: 0 12px 12px 0;
+    }
+    .suggestion-box h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.3rem; }
+    .suggestion-box p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.45; }
+
+    /* ─── DIAGNÓSTICO WIZARD (CUESTIONARIO) ───────────────────── */
+    .wizard-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;
+    }
+    .wizard-title { font-size: 1.5rem; font-weight: 700; }
+    .wizard-progress { display: flex; align-items: center; gap: 1rem; width: 100%; max-width: 400px; }
+    .progress-bar-bg { flex: 1; height: 6px; background: rgba(255,255,255,0.05); border-radius: 100px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--purple), var(--emerald)); width: 0%; transition: width 0.4s var(--transition); }
+    .progress-text { font-size: 0.8rem; color: var(--text-muted); min-width: 40px; text-align: right; }
+
+    .questions-container {
+      margin-bottom: 2rem;
+    }
+    .question-block {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid var(--border); border-radius: 16px;
+      padding: 1.5rem 2rem; margin-bottom: 1.25rem;
+      animation: fadeInUp 0.5s var(--transition) both;
+    }
+    .question-statement {
+      font-size: 1rem; font-weight: 500; line-height: 1.6; margin-bottom: 1.25rem;
+    }
+    .options-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem;
+    }
+    .option-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border); border-radius: 10px;
+      padding: 0.8rem; text-align: center; cursor: pointer;
+      font-size: 0.82rem; transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    }
+    .option-card:hover {
+      background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2);
+      transform: translateY(-1px);
+    }
+    .option-card.selected {
+      background: rgba(124, 58, 237, 0.15);
+      border-color: var(--purple); color: white;
+      font-weight: 600;
+      box-shadow: 0 0 15px rgba(124, 58, 237, 0.2);
+    }
+    .wizard-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 2.5rem;
+    }
+
+    /* ─── RESULTS VIEW ─────────────────────────────────────────── */
+    .results-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
+    }
+    .gauge-wrapper {
+      position: relative; display: flex; flex-direction: column; align-items: center;
+    }
+    .gauge-svg {
+      width: 280px; height: 280px; transform: rotate(-90deg);
+    }
+    .gauge-bg {
+      fill: none; stroke: rgba(255,255,255,0.03); stroke-width: 14;
+    }
+    .gauge-fill {
+      fill: none; stroke-width: 14; stroke-linecap: round;
+      stroke-dasharray: 691; stroke-dashoffset: 691;
+      transition: stroke-dashoffset 1.5s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.5s ease;
+    }
+    .gauge-info {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    .gauge-score {
+      font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 700; line-height: 1;
+    }
+    .gauge-label {
+      font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.25rem;
+    }
+
+    .results-details h2 { font-size: 2.2rem; margin-bottom: 0.75rem; }
+    .results-zone-badge { display: inline-block; margin-bottom: 1.5rem; }
+    .results-description { font-size: 0.92rem; color: var(--text-muted); line-height: 1.75; margin-bottom: 2rem; }
+
+    .domain-bars {
+      display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 2rem;
+    }
+    .domain-bar-item {
+      display: flex; flex-direction: column; gap: 0.4rem;
+    }
+    .domain-bar-header {
+      display: flex; justify-content: space-between; font-size: 0.8rem;
+    }
+    .domain-bar-name { font-weight: 600; color: var(--text); }
+    .domain-bar-value { color: var(--text-muted); }
+    .domain-bar-track {
+      height: 8px; background: rgba(255,255,255,0.04); border-radius: 100px; overflow: hidden;
+    }
+    .domain-bar-fill {
+      height: 100%; border-radius: 100px; width: 0%;
+      background: linear-gradient(90deg, var(--purple), var(--emerald));
+      transition: width 1s var(--transition);
+    }
+
+    /* Crisis Banner */
+    .crisis-banner {
+      background: linear-gradient(135deg, rgba(220,38,38,0.2) 0%, rgba(127,29,29,0.2) 100%);
+      border: 1px solid rgba(220, 38, 38, 0.4); border-radius: 16px;
+      padding: 1.75rem; margin-top: 2rem; display: flex; gap: 1.25rem; align-items: flex-start;
+      box-shadow: 0 15px 40px rgba(220,38,38,0.15);
+      animation: pulse-red 3s infinite;
+    }
+    @keyframes pulse-red {
+      0%, 100% { box-shadow: 0 0 15px rgba(220,38,38,0.15); }
+      50% { box-shadow: 0 0 25px rgba(220,38,38,0.3); }
+    }
+    .crisis-icon { font-size: 2.2rem; line-height: 1; }
+    .crisis-body h3 { font-family: 'Inter', sans-serif; font-size: 1.1rem; font-weight: 700; color: #FFAAAA; margin-bottom: 0.4rem; }
+    .crisis-body p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem; }
+    .crisis-buttons { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .btn-crisis {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.5rem 1rem; border-radius: 100px; font-size: 0.78rem; font-weight: 600;
+      text-decoration: none; border: 1px solid rgba(255,255,255,0.2); color: white;
+      background: rgba(220,38,38,0.3); transition: background 0.3s;
+    }
+    .btn-crisis:hover { background: rgba(220,38,38,0.5); }
+
+    /* ─── ADMIN DASHBOARD ──────────────────────────────────────── */
+    .admin-stats {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 16px;
+      padding: 1.5rem; text-align: center;
+    }
+    .stat-card-value {
+      font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--purple), var(--emerald-light));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-card-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.4rem; }
+
+    .admin-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2.5rem;
+    }
+    .chart-container {
+      height: 250px; display: flex; align-items: flex-end; justify-content: space-around;
+      padding-top: 2rem; border-bottom: 1px solid var(--border); position: relative;
+    }
+    .chart-bar-wrap {
+      display: flex; flex-direction: column; align-items: center; width: 48px; height: 100%; justify-content: flex-end;
+    }
+    .chart-bar {
+      width: 100%; border-radius: 6px 6px 0 0; background: var(--purple);
+      transition: height 1s var(--transition); height: 0; min-height: 4px;
+    }
+    .chart-bar-val { font-size: 0.75rem; font-weight: bold; margin-bottom: 0.3rem; }
+    .chart-bar-label { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center; width: 80px; }
+
+    /* Admin controls */
+    .table-controls {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; gap: 1rem;
+    }
+    .search-input { width: 100%; max-width: 300px; }
+    .filter-select {
+      background: rgba(7, 7, 15, 0.8); border: 1px solid var(--border); color: var(--text);
+      padding: 0.5rem 1rem; border-radius: 8px; outline: none; font-size: 0.82rem;
+    }
+
+    /* Modal details */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000;
+      backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center;
+      padding: 1.5rem;
+    }
+    .modal-content {
+      background: #0d0d18; border: 1px solid var(--border); border-radius: 24px;
+      width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; padding: 2.5rem;
+      position: relative; box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+    }
+    .modal-close {
+      position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.5rem; background: none;
+      border: none; color: var(--text-muted); cursor: pointer; transition: color 0.3s;
+    }
+    .modal-close:hover { color: var(--text); }
+    .modal-header { margin-bottom: 1.5rem; }
+    .modal-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .modal-subtitle { font-size: 0.85rem; color: var(--text-muted); }
+
+    .modal-results-breakdown {
+      display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; margin-top: 1.5rem;
+    }
+    .modal-answers-list {
+      display: flex; flex-direction: column; gap: 0.6rem; max-height: 380px; overflow-y: auto;
+      padding-right: 0.5rem; border: 1px solid var(--border); border-radius: 12px; padding: 1rem;
+      background: rgba(0,0,0,0.2);
+    }
+    .modal-answer-item {
+      display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem;
+      padding-bottom: 0.4rem; border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .modal-answer-item:last-child { border: none; }
+    .modal-answer-num { font-weight: bold; width: 22px; color: var(--purple-glow); }
+    .modal-answer-text { flex: 1; margin: 0 0.5rem; color: var(--text-muted); }
+    .modal-answer-val { font-weight: bold; padding: 0.1rem 0.4rem; border-radius: 4px; }
+    .modal-answer-val.val-0 { color: #888; background: rgba(255,255,255,0.05); }
+    .modal-answer-val.val-1 { color: #6EE7B7; background: rgba(5,150,105,0.1); }
+    .modal-answer-val.val-2 { color: #FBBF24; background: rgba(217,119,6,0.1); }
+    .modal-answer-val.val-3 { color: #F87171; background: rgba(220,38,38,0.1); }
+
+    /* Keyframes */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── RESPONSIVE ───────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .instruments-list { grid-template-columns: 1fr; }
+      .wizard-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .wizard-progress { max-width: 100%; }
+      .options-grid { grid-template-columns: repeat(2, 1fr); }
+      .results-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .admin-grid { grid-template-columns: 1fr; }
+      .admin-stats { grid-template-columns: repeat(2, 1fr); }
+      .modal-results-breakdown { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ NAVIGATION ═══════════════════════════════════════════ -->
+  <nav>
+    <a href="./index.html" class="nav-logo">
+      <img src="img/logo.png" alt="NICOMACO" onerror="this.src='Modelo-amoragape.png'">
+      <div class="nav-logo-text">
+        <span class="nav-logo-brand">NICÓMACO</span>
+        <span class="nav-logo-sub">Clínica de Contacto®</span>
+      </div>
+    </a>
+    <div class="nav-user" id="nav-user-area" style="display: none;">
+      <div class="user-badge">
+        <span class="user-avatar" id="user-avatar-char">U</span>
+        <span id="user-display-name">Usuario</span>
+      </div>
+      <button class="btn-logout" id="btn-logout-nav" onclick="logout()">Cerrar sesión</button>
+    </div>
+  </nav>
+
+  <!-- ═══ MAIN APP CONTAINER ═══════════════════════════════════ -->
+  <div class="app-container">
+
+    <!-- ─── VIEW 1: AUTHENTICATION ────────────────────────────── -->
+    <div id="view-auth" class="auth-view glass-card glow-border" style="display: none;">
+      <div class="auth-toggle">
+        <button class="auth-tab active" id="tab-login" onclick="setAuthTab('login')">Iniciar Sesión</button>
+        <button class="auth-tab" id="tab-register" onclick="setAuthTab('register')">Registrarse</button>
+      </div>
+
+      <form id="auth-form" onsubmit="handleAuthSubmit(event)">
+        <div class="form-group" id="group-name" style="display: none;">
+          <label for="auth-name">Nombre Completo</label>
+          <input type="text" id="auth-name" class="form-input" placeholder="Ingresa tu nombre">
+        </div>
+        <div class="form-group">
+          <label for="auth-email">Correo Electrónico</label>
+          <input type="email" id="auth-email" class="form-input" placeholder="ejemplo@correo.com" required>
+        </div>
+        <div class="form-group">
+          <label for="auth-password">Contraseña</label>
+          <input type="password" id="auth-password" class="form-input" placeholder="••••••••" required>
+        </div>
+        
+        <div id="auth-error" style="color: var(--red); font-size: 0.8rem; margin-top: 0.5rem; text-align: center; display: none;"></div>
+
+        <button type="submit" class="btn-submit" id="btn-auth-submit">Entrar</button>
+      </form>
+
+      <div class="auth-footer-note" id="auth-note">
+        ¿No tienes cuenta? Regístrate en la pestaña superior.
+      </div>
+    </div>
+
+    <!-- ─── VIEW 2: USER DASHBOARD ────────────────────────────── -->
+    <div id="view-user-dashboard" style="display: none;">
+      <div class="dashboard-header">
+        <div>
+          <h1 id="user-welcome">Hola, Sofía</h1>
+          <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 0.25rem;">Bienvenido/a a tu espacio de crecimiento y cuidado personal.</p>
+        </div>
+        <button class="btn-action primary" onclick="startDiagnostic('cero-amor')">Nuevo Diagnóstico</button>
+      </div>
+
+      <div class="dashboard-grid">
+        <div>
+          <!-- Instrumentos Card -->
+          <div class="glass-card glow-border" style="padding: 2rem; margin-bottom: 2rem;">
+            <h2 class="section-title">Instrumentos Disponibles</h2>
+            <div class="instruments-list">
+              <div class="instrument-card">
+                <div>
+                  <div class="instrument-meta">⚡ Autoviolentómetro</div>
+                  <h3 class="instrument-name">Cero Amor</h3>
+                  <p class="instrument-desc">Identifica y mide las manifestaciones de autoviolencia física, psicológica y emocional que ejerces contra ti mismo/a.</p>
+                </div>
+                <button class="btn-action primary" onclick="startDiagnostic('cero-amor')" style="width: 100%; justify-content: center;">Iniciar Examen</button>
+              </div>
+
+              <div class="instrument-card">
+                <div>
+                  <div class="instrument-meta">🌿 Amorómetro</div>
+                  <h3 class="instrument-name">Amor Ágape</h3>
+                  <p class="instrument-desc">Mide tu desarrollo en el amor propio incondicional y evalúa tu capacidad para construir relaciones saludables.</p>
+                </div>
+                <button class="btn-action secondary" onclick="startDiagnostic('amor-agape')" style="width: 100%; justify-content: center;">Iniciar Examen</button>
+              </div>
+
+              <div class="instrument-card">
+                <div>
+                  <div class="instrument-meta">⚖️ Violentómetro Vicario</div>
+                  <h3 class="instrument-name">Cero Amor Paternal</h3>
+                  <p class="instrument-desc">Mide y detecta las conductas de violencia vicaria ejercidas por el padre hacia los hijos para dañar a la madre.</p>
+                </div>
+                <button class="btn-action secondary" onclick="startDiagnostic('cero-amor-paternal')" style="width: 100%; justify-content: center;">Iniciar Examen</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- History Card -->
+          <div class="glass-card glow-border history-card" style="padding: 2rem;">
+            <h2 class="section-title">Mi Historial de Diagnósticos</h2>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Instrumento</th>
+                    <th>Puntaje / Índice</th>
+                    <th>Resultado</th>
+                    <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody id="user-history-table">
+                  <tr>
+                    <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">Aún no has realizado diagnósticos. Tu primer resultado aparecerá aquí.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right column panels -->
+        <div class="suggestions-panel">
+          <div class="glass-card glow-border" style="padding: 1.75rem;">
+            <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1.25rem;">Recomendaciones del Día</h3>
+            <div id="dashboard-suggestions">
+              <div class="suggestion-box">
+                <h4>Inicia tu Diagnóstico</h4>
+                <p>Aplica el Autoviolentómetro Cero Amor para obtener tu primera radiografía emocional y ver consejos de autocuidado.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card glow-border" style="padding: 1.75rem;">
+            <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Líneas de Apoyo Inmediato</h3>
+            <p style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.25rem;">Si tú o alguien que conoces necesita ayuda inmediata y confidencial en México:</p>
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+              <div style="font-size: 0.8rem;">
+                <strong style="color: var(--purple-glow);">SAPTEL:</strong><br>
+                <span style="font-size: 0.9rem; font-weight: bold; color: white;">55 5259-8121</span> (24/7)
+              </div>
+              <div style="font-size: 0.8rem;">
+                <strong style="color: var(--emerald-light);">Línea de la Vida:</strong><br>
+                <span style="font-size: 0.9rem; font-weight: bold; color: white;">800 911-2000</span> (Gratuita)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── VIEW 3: DIAGNÓSTICO WIZARD (CUESTIONARIO) ───────────── -->
+    <div id="view-diagnostic" class="glass-card glow-border" style="display: none;">
+      <div class="wizard-header">
+        <div>
+          <div class="wizard-title" id="diag-instrument-title">Autoviolentómetro Cero Amor</div>
+          <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.25rem;" id="diag-dimension-name">Dimensión: Psicológica y Emocional</p>
+        </div>
+        <div class="wizard-progress">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="diag-progress-fill"></div>
+          </div>
+          <span class="progress-text" id="diag-progress-text">0%</span>
+        </div>
+      </div>
+
+      <div id="wizard-questions-list" class="questions-container">
+        <!-- Generado dinámicamente -->
+      </div>
+
+      <div class="wizard-footer">
+        <button class="btn-action secondary" id="btn-diag-prev" onclick="diagPrev()">Anterior</button>
+        <button class="btn-action primary" id="btn-diag-next" onclick="diagNext()">Siguiente</button>
+      </div>
+    </div>
+
+    <!-- ─── VIEW 4: DIAGNOSTIC RESULTS ──────────────────────────── -->
+    <div id="view-results" class="glass-card glow-border" style="display: none;">
+      <div class="results-grid">
+        <!-- Gauge visualization -->
+        <div class="gauge-wrapper">
+          <svg class="gauge-svg" viewBox="0 0 240 240">
+            <circle class="gauge-bg" cx="120" cy="120" r="110"></circle>
+            <circle class="gauge-fill" id="results-gauge-fill" cx="120" cy="120" r="110" stroke="#7C3AED"></circle>
+          </svg>
+          <div class="gauge-info">
+            <div class="gauge-score" id="results-score-value">0%</div>
+            <div class="gauge-label" id="results-score-label">Autoviolencia</div>
+          </div>
+        </div>
+
+        <!-- Detailed textual results -->
+        <div class="results-details">
+          <span class="badge-zone" id="results-zone-badge">Zona Verde</span>
+          <h2 id="results-headline">¡Date cuenta y modera!</h2>
+          <p class="results-description" id="results-explanation">
+            Tu nivel de autoviolencia es bajo. Sin embargo, hay patrones sutiles de autocrítica que requieren tu atención.
+          </p>
+
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Análisis por Dominio</h3>
+          <div class="domain-bars">
+            <div class="domain-bar-item">
+              <div class="domain-bar-header">
+                <span class="domain-bar-name" id="domain-name-0">Relación Intrapersonal</span>
+                <span class="domain-bar-value" id="domain-val-0">0%</span>
+              </div>
+              <div class="domain-bar-track">
+                <div class="domain-bar-fill" id="domain-fill-0"></div>
+              </div>
+            </div>
+            <div class="domain-bar-item">
+              <div class="domain-bar-header">
+                <span class="domain-bar-name" id="domain-name-1">Relación Interpersonal</span>
+                <span class="domain-bar-value" id="domain-val-1">0%</span>
+              </div>
+              <div class="domain-bar-track">
+                <div class="domain-bar-fill" id="domain-fill-1"></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 1rem;">
+            <button class="btn-action primary" onclick="showView('user-dashboard')">Volver al Dashboard</button>
+            <button class="btn-action secondary" onclick="printResults()">Imprimir Resultados</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed math breakdown -->
+      <div class="results-math-breakdown" id="results-math-breakdown" style="margin-top: 3rem; border-top: 1px solid var(--border); padding-top: 2rem;">
+        <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 1.5rem; text-align: center;">Explicación del Cálculo (Matriz Ponderada VDF)</h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+          <!-- Dimensions Column -->
+          <div class="glass-card glow-border" style="padding: 1.5rem; background: rgba(255,255,255,0.02);">
+            <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+              📊 Dimensiones Evaluadas
+            </h4>
+            <div id="dimension-bars-list" style="display: flex; flex-direction: column; gap: 1rem;">
+              <!-- Generated dynamically -->
+            </div>
+          </div>
+
+          <!-- Formula Column -->
+          <div class="glass-card glow-border" style="padding: 1.5rem; background: rgba(255,255,255,0.02); display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                🧮 Fórmula del Índice Global
+              </h4>
+              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">
+                Cada reactivo tiene una ponderación de impacto de 0 a 1 sobre sus dimensiones asociadas. El índice final se obtiene promediando las puntuaciones normalizadas de los dominios:
+              </p>
+              <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem; text-align: center; margin-bottom: 1rem;" id="formula-display-math">
+                <!-- Generado dinámicamente -->
+              </div>
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">
+              💡 <em>Las dimensiones y reactivos de alto riesgo influyen de manera ponderada en el cálculo del dominio correspondiente.</em>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Crisis Alert -->
+      <div class="crisis-banner" id="results-crisis-banner" style="display: none;">
+        <div class="crisis-icon">⚠️</div>
+        <div class="crisis-body">
+          <h3>Señales de Alerta Críticas Detectadas</h3>
+          <p>Has respondido afirmativamente a manifestaciones autolesivas o de ideación suicida. Tu bienestar e integridad son prioritarios. Te recomendamos contactar hoy mismo a profesionales que pueden escucharte de manera gratuita y anónima.</p>
+          <div class="crisis-buttons">
+            <a href="tel:5552598121" class="btn-crisis">Llamar a SAPTEL (55 5259-8121)</a>
+            <a href="tel:8009112000" class="btn-crisis">Llamar a Línea de la Vida (800 911-2000)</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── VIEW 5: ADMIN DASHBOARD ───────────────────────────── -->
+    <div id="view-admin-dashboard" style="display: none;">
+      <div class="dashboard-header">
+        <div>
+          <h1>Panel de Administración</h1>
+          <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 0.25rem;">Consolidado de diagnósticos, estadísticas de participación y base de datos clínica.</p>
+        </div>
+        <button class="btn-action secondary" onclick="seedMockData()" style="font-size: 0.78rem;">Simular Datos Demo</button>
+      </div>
+
+      <!-- Stats row -->
+      <div class="admin-stats">
+        <div class="stat-card">
+          <div class="stat-card-value" id="admin-stat-total-users">0</div>
+          <div class="stat-card-label">Usuarios Registrados</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-value" id="admin-stat-total-exams">0</div>
+          <div class="stat-card-label">Diagnósticos Realizados</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-value" id="admin-stat-avg-score">0%</div>
+          <div class="stat-card-label">Promedio de Autoviolencia</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-value" id="admin-stat-red-pct">0%</div>
+          <div class="stat-card-label">En Zona Roja/Crítica</div>
+        </div>
+      </div>
+
+      <!-- Charts & Zones -->
+      <div class="admin-grid">
+        <div class="glass-card glow-border" style="padding: 2rem;">
+          <h2 class="section-title">Distribución por Zonas de Riesgo</h2>
+          <div class="chart-container" id="admin-zones-chart">
+            <div class="chart-bar-wrap">
+              <div class="chart-bar-val" id="chart-val-verde">0</div>
+              <div class="chart-bar" id="chart-bar-verde" style="background: var(--emerald-light);"></div>
+              <div class="chart-bar-label">Verde</div>
+            </div>
+            <div class="chart-bar-wrap">
+              <div class="chart-bar-val" id="chart-val-amarilla">0</div>
+              <div class="chart-bar" id="chart-bar-amarilla" style="background: var(--yellow);"></div>
+              <div class="chart-bar-label">Amarilla</div>
+            </div>
+            <div class="chart-bar-wrap">
+              <div class="chart-bar-val" id="chart-val-roja">0</div>
+              <div class="chart-bar" id="chart-bar-roja" style="background: var(--red);"></div>
+              <div class="chart-bar-label">Roja</div>
+            </div>
+            <div class="chart-bar-wrap">
+              <div class="chart-bar-val" id="chart-val-critica">0</div>
+              <div class="chart-bar" id="chart-bar-critica" style="background: #7F1D1D;"></div>
+              <div class="chart-bar-label">Crítica</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card glow-border" style="padding: 2rem;">
+          <h2 class="section-title">Análisis de Alertas Críticas</h2>
+          <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.25rem;">Porcentaje de participantes que marcaron positivo en reactivos de ideación suicida o autolesión severa.</p>
+          <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem;" id="admin-critical-alerts-list">
+            <!-- Cargado dinámicamente -->
+          </div>
+        </div>
+      </div>
+
+      <!-- User lists -->
+      <div class="glass-card glow-border" style="padding: 2rem;">
+        <div class="table-controls">
+          <h2 class="section-title" id="admin-table-title" style="margin-bottom: 0; display: inline-flex; align-items: center;">Lista de Usuarios</h2>
+          <div style="display: flex; gap: 0.75rem; flex: 1; justify-content: flex-end;">
+            <input type="text" id="admin-search" class="form-input search-input" placeholder="Buscar por nombre o correo..." oninput="filterAdminTable()">
+            <select id="admin-filter-zone" class="filter-select" onchange="filterAdminTable()">
+              <option value="all">Todas las zonas</option>
+              <option value="verde">Zona Verde</option>
+              <option value="amarilla">Zona Amarilla</option>
+              <option value="roja">Zona Roja</option>
+              <option value="critica">Zona Crítica</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Último Diagnóstico</th>
+                <th>Fecha</th>
+                <th>Resultado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="admin-users-table">
+              <!-- Cargado dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ MODAL DETAIL VIEWS (ADMIN VIEW) ══════════════════════ -->
+  <div class="modal-overlay" id="admin-modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeAdminModal()">✕</button>
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-user-name">Sofía Pérez</h2>
+        <p class="modal-subtitle" id="modal-user-email">sofia@correo.com</p>
+      </div>
+
+      <div class="modal-results-breakdown">
+        <!-- Left Column: Details & Gauges -->
+        <div>
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Detalles del Diagnóstico</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 1.5rem; background: rgba(255,255,255,0.02); padding: 1.25rem; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 1.5rem;">
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              <span id="modal-score" style="font-size: 2.8rem; font-weight: 700; font-family: 'Playfair Display', serif;">0%</span>
+              <span id="modal-zone-badge" class="badge-zone" style="margin-top: 0.5rem;">Zona Verde</span>
+            </div>
+            <div style="font-size: 0.8rem; display: flex; flex-direction: column; gap: 0.5rem;">
+              <div><strong>Fecha:</strong> <span id="modal-date">10/06/2026</span></div>
+              <div><strong>Instrumento:</strong> <span id="modal-instrument">Cero Amor</span></div>
+              <div><strong>Contacto Directo:</strong> <a href="" id="modal-contact-link" style="color: var(--emerald-light); text-decoration: none;">Enviar Mensaje</a></div>
+            </div>
+          </div>
+
+          <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem;">Desglose por Dominios</h4>
+          <div class="domain-bars" id="modal-domain-bars">
+            <!-- Cargado dinámicamente -->
+          </div>
+        </div>
+
+        <!-- Right Column: Answers list -->
+        <div>
+          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem;">Respuestas Detalladas</h3>
+          <div class="modal-answers-list" id="modal-answers-container">
+            <!-- Generado dinámicamente -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ JAVASCRIPT ════════════════════════════ -->
+  <script>
+    'use strict';
+
+    // ── 1. GLOBAL STATE & MEMORY ────────────────────────────────
+    let currentUser = null;
+    let authTab = 'login';
+    let currentDiag = null;
+    let diagData = null;
+    let diagAnswers = {};
+    let wizardStep = 0; // 0: Module 1, 1: Module 2...
+    let activeCriticalFilter = null;
+    const questionsPerStep = 5;
+
+    // Seeding default database if empty
+    if (!localStorage.getItem('nicomaco_users')) {
+      const defaultUsers = [
+        { name: "Blanca Estela Angulo", email: "admin@nicomaco.cl", password: "admin123", role: "admin", history: [] }
+      ];
+      localStorage.setItem('nicomaco_users', JSON.stringify(defaultUsers));
+    }
+
+    // ── 2. VIEW MANAGEMENT (ROUTING) ────────────────────────────
+    function showView(viewId) {
+      document.getElementById('view-auth').style.display = 'none';
+      document.getElementById('view-user-dashboard').style.display = 'none';
+      document.getElementById('view-diagnostic').style.display = 'none';
+      document.getElementById('view-results').style.display = 'none';
+      document.getElementById('view-admin-dashboard').style.display = 'none';
+
+      const navUser = document.getElementById('nav-user-area');
+      if (currentUser) {
+        navUser.style.display = 'flex';
+        document.getElementById('user-display-name').innerText = currentUser.name;
+        document.getElementById('user-avatar-char').innerText = currentUser.name.charAt(0).toUpperCase();
+      } else {
+        navUser.style.display = 'none';
+      }
+
+      if (viewId === 'auth') {
+        document.getElementById('view-auth').style.display = 'block';
+      } else if (viewId === 'user-dashboard') {
+        if (!currentUser) return showView('auth');
+        if (currentUser.role === 'admin') return showView('admin-dashboard');
+        
+        document.getElementById('user-welcome').innerText = `Hola, ${currentUser.name.split(' ')[0]}`;
+        renderUserHistory();
+        document.getElementById('view-user-dashboard').style.display = 'block';
+      } else if (viewId === 'diagnostic') {
+        if (!currentUser) return showView('auth');
+        document.getElementById('view-diagnostic').style.display = 'block';
+      } else if (viewId === 'results') {
+        if (!currentUser) return showView('auth');
+        document.getElementById('view-results').style.display = 'block';
+      } else if (viewId === 'admin-dashboard') {
+        if (!currentUser || currentUser.role !== 'admin') return showView('auth');
+        renderAdminDashboard();
+        document.getElementById('view-admin-dashboard').style.display = 'block';
+      }
+    }
+
+    // ── 3. AUTHENTICATION CONTROLS ──────────────────────────────
+    function setAuthTab(tab) {
+      authTab = tab;
+      document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+      document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+      document.getElementById('group-name').style.display = tab === 'register' ? 'block' : 'none';
+      document.getElementById('btn-auth-submit').innerText = tab === 'login' ? 'Entrar' : 'Crear Cuenta';
+      document.getElementById('auth-note').innerText = tab === 'login' ? 
+        '¿No tienes cuenta? Regístrate en la pestaña superior.' : 
+        '¿Ya tienes una cuenta? Inicia sesión en la pestaña superior.';
+      document.getElementById('auth-error').style.display = 'none';
+    }
+
+    function handleAuthSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('auth-email').value.trim();
+      const password = document.getElementById('auth-password').value;
+      const name = document.getElementById('auth-name').value.trim();
+      const errEl = document.getElementById('auth-error');
+      errEl.style.display = 'none';
+
+      let users = JSON.parse(localStorage.getItem('nicomaco_users')) || [];
+
+      if (authTab === 'login') {
+        const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+        if (!user) {
+          errEl.innerText = 'Correo o contraseña incorrectos.';
+          errEl.style.display = 'block';
+          return;
+        }
+        currentUser = user;
+      } else {
+        if (users.some(u => u.email.toLowerCase() === email.toLowerCase())) {
+          errEl.innerText = 'El correo electrónico ya está registrado.';
+          errEl.style.display = 'block';
+          return;
+        }
+        const newUser = {
+          name: name || 'Usuario Anónimo',
+          email: email,
+          password: password,
+          role: 'user',
+          history: []
+        };
+        users.push(newUser);
+        localStorage.setItem('nicomaco_users', JSON.stringify(users));
+        currentUser = newUser;
+      }
+
+      document.getElementById('auth-form').reset();
+      showView('user-dashboard');
+    }
+
+    function logout() {
+      currentUser = null;
+      activeCriticalFilter = null;
+      showView('auth');
+    }
+
+    // ── 4. USER HISTORIAL RENDER ────────────────────────────────
+    function renderUserHistory() {
+      const tbody = document.getElementById('user-history-table');
+      tbody.innerHTML = '';
+
+      if (!currentUser.history || currentUser.history.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">Aún no has realizado diagnósticos. Tu primer resultado aparecerá aquí.</td></tr>`;
+        document.getElementById('dashboard-suggestions').innerHTML = `
+          <div class="suggestion-box">
+            <h4>Inicia tu Diagnóstico</h4>
+            <p>Aplica el Autoviolentómetro Cero Amor para obtener tu primera radiografía emocional y ver consejos de autocuidado.</p>
+          </div>`;
+        return;
+      }
+
+      // Sort history by date descending
+      const sortedHistory = [...currentUser.history].sort((a,b) => new Date(b.date) - new Date(a.date));
+
+      sortedHistory.forEach(item => {
+        const tr = document.createElement('tr');
+        const dateStr = new Date(item.date).toLocaleDateString();
+        let scoreStr = '';
+        if (item.instrumentId === 'cero-amor') scoreStr = `${Math.round(item.iga * 100)}%`;
+        else if (item.instrumentId === 'amor-agape') scoreStr = `${Math.round(item.iba * 100)}%`;
+        else scoreStr = `${Math.round((item.ivp || item.globalIndex) * 100)}%`;
+        const zoneClass = getZoneClass(item.zoneId);
+
+        tr.innerHTML = `
+          <td>${dateStr}</td>
+          <td><strong>${item.instrumentTitle}</strong></td>
+          <td>${scoreStr}</td>
+          <td><span class="badge-zone ${zoneClass}">${item.zoneName}</span></td>
+          <td><button class="btn-action secondary" onclick="viewPastResult('${item.id}')" style="padding: 0.3rem 0.8rem; font-size: 0.75rem;">Ver Ficha</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Update dashboard suggestions with the latest result
+      const latest = sortedHistory[0];
+      let suggestionText = '';
+      if (latest.instrumentId === 'cero-amor') {
+        if (latest.zoneId === 'zone_verde') {
+          suggestionText = `
+            <div class="suggestion-box">
+              <h4>Continúa con la Autoobservación</h4>
+              <p>Tu nivel es bajo, lo cual es excelente. Practica el <strong>Diálogo Interno Consciente</strong>: dedícate 3 elogios diarios y regístralos.</p>
+            </div>
+            <div class="suggestion-box" style="border-left-color: var(--emerald-light); margin-top: 1rem;">
+              <h4>Prueba el Amorómetro</h4>
+              <p>Dado que estás en zona segura, mide ahora tu capacidad constructiva de dar y recibir afecto con el examen de <strong>Amor Ágape</strong>.</p>
+            </div>`;
+        } else if (latest.zoneId === 'zone_amarilla') {
+          suggestionText = `
+            <div class="suggestion-box" style="border-left-color: var(--yellow);">
+              <h4>Regula tu Diálogo Interno</h4>
+              <p>Observas autocrítica recurrente. Realiza el ejercicio del <strong>Árbol de la Autocrítica</strong> (Manual del Participante pág. 12) para mapear el origen de estos mensajes.</p>
+            </div>
+            <div class="suggestion-box" style="border-left-color: var(--yellow); margin-top: 1rem;">
+              <h4>Autocuidado Físico</h4>
+              <p>Recupera tus pasatiempos. No canceles compromisos sociales con tal de complacer a terceros o mitigar miedos irracionales.</p>
+            </div>`;
+        } else {
+          suggestionText = `
+            <div class="suggestion-box" style="border-left-color: var(--red);">
+              <h4>Atención Psicológica Prioritaria</h4>
+              <p>Presentas niveles de autoviolencia física o emocional intensos. Es importante acudir a psicoterapia. En Clínica NICÓMACO contamos con acompañamiento personalizado.</p>
+            </div>
+            <div class="suggestion-box" style="border-left-color: var(--red); margin-top: 1rem;">
+              <h4>Red de Apoyo Activa</h4>
+              <p>Comunícate hoy mismo con tus 3 personas de confianza. Explícales tu situación emocional actual; el aislamiento agrava la autoviolencia.</p>
+            </div>`;
+        }
+      } else if (latest.instrumentId === 'cero-amor-paternal') {
+        if (latest.zoneId.includes('verde')) {
+          suggestionText = `
+            <div class="suggestion-box">
+              <h4>Mantente Alerta y Pon Límites</h4>
+              <p>El nivel inicial es bajo, pero recuerda que descalificar a la madre frente a los hijos daña su estabilidad. Registra los comentarios negativos y pon límites claros en la comunicación.</p>
+            </div>
+            <div class="suggestion-box" style="border-left-color: var(--emerald-light); margin-top: 1rem;">
+              <h4>Diálogo Asertivo</h4>
+              <p>Evita responder a provocaciones o discusiones frente a los menores. Utiliza canales escritos y formales para acordar temas de crianza.</p>
+            </div>`;
+        } else if (latest.zoneId.includes('amarilla')) {
+          suggestionText = `
+            <div class="suggestion-box" style="border-left-color: var(--yellow);">
+              <h4>Documenta Incidencias y Busca Asesoría</h4>
+              <p>Existen conductas de obstrucción y manipulación. Lleva una bitácora detallada de fechas, horas y capturas de pantalla de los incumplimientos o descalificaciones.</p>
+            </div>
+            <div class="suggestion-box" style="border-left-color: var(--yellow); margin-top: 1rem;">
+              <h4>Apoyo para tus Hijos</h4>
+              <p>Considera acompañamiento psicológico infantil para blindar emocionalmente a tus hijos contra la manipulación o alienación parental.</p>
+            </div>`;
+        } else {
+          suggestionText = `
+            <div class="suggestion-box" style="border-left-color: var(--red);">
+              <h4>Protección Urgente y Asistencia Legal</h4>
+              <p>Se detectan conductas de alto riesgo (amenazas, retenciones, sustracción). Es vital activar redes de apoyo y consultar a un abogado familiar para tramitar medidas cautelares de urgencia.</p>
+            </div>
+            <div class="suggestion-box" style="border-left-color: var(--red); margin-top: 1rem;">
+              <h4>Resguardo y Seguridad</h4>
+              <p>Mantén a la mano documentos oficiales de tus hijos y un plan de resguardo seguro. Prioriza la integridad física y mental tuya y de tus menores.</p>
+            </div>`;
+        }
+      } else {
+        suggestionText = `
+          <div class="suggestion-box" style="border-left-color: var(--emerald-light);">
+            <h4>Consolida el Amor Propio</h4>
+            <p>Sigue practicando el <strong>Apapacho</strong> y el <strong>Perdón</strong>. El amor propio es un camino activo de constancia diaria.</p>
+          </div>`;
+      }
+      document.getElementById('dashboard-suggestions').innerHTML = suggestionText;
+    }
+
+    function getZoneClass(zoneId) {
+      if (zoneId.includes('verde')) return 'verde';
+      if (zoneId.includes('amarilla') || zoneId.includes('azul')) return 'amarilla';
+      if (zoneId.includes('roja') || zoneId.includes('purpura')) return 'roja';
+      return 'critica';
+    }
+
+    // ── 5. RUN DIAGNOSTIC WIZARD ────────────────────────────────
+    function startDiagnostic(instrumentId) {
+      const url = instrumentId === 'cero-amor' ? 'cero_amor.json' : 
+                  (instrumentId === 'cero-amor-paternal' ? 'cero_amor_paternal.json' : 'amor_agape.json');
+      
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          diagData = data;
+          currentDiag = instrumentId;
+          diagAnswers = {};
+          wizardStep = 0;
+          
+          document.getElementById('diag-instrument-title').innerText = data.metadata.title;
+          
+          renderWizardQuestions();
+          showView('diagnostic');
+        })
+        .catch(err => {
+          alert('Error al cargar la configuración del violentómetro: ' + err);
+        });
+    }
+
+    function renderWizardQuestions() {
+      const startIdx = wizardStep * questionsPerStep;
+      const endIdx = Math.min(startIdx + questionsPerStep, diagData.reactivos.length);
+      const slice = diagData.reactivos.slice(startIdx, endIdx);
+      
+      const container = document.getElementById('wizard-questions-list');
+      container.innerHTML = '';
+
+      // Update dimension title based on first question in the screen
+      if (slice.length > 0) {
+        const firstQ = slice[0];
+        const primaryWeight = firstQ.weights[0];
+        const dimension = diagData.dimensions.find(d => d.id === primaryWeight.dimension_id);
+        if (dimension) {
+          document.getElementById('diag-dimension-name').innerText = `Dimensión: ${dimension.name}`;
+        }
+      }
+
+      // Update progress bar
+      const progress = Math.round((startIdx / diagData.reactivos.length) * 100);
+      document.getElementById('diag-progress-fill').style.width = `${progress}%`;
+      document.getElementById('diag-progress-text').innerText = `${progress}%`;
+
+      slice.forEach(q => {
+        const block = document.createElement('div');
+        block.className = 'question-block glow-border';
+        
+        const scale = diagData.response_scales[q.scale_id];
+        const answersHtml = scale.map(opt => {
+          const isSelected = diagAnswers[q.id] === opt.value;
+          return `
+            <div class="option-card ${isSelected ? 'selected' : ''}" 
+                 onclick="selectOption('${q.id}', ${opt.value}, this)">
+              ${opt.label}
+            </div>
+          `;
+        }).join('');
+
+        block.innerHTML = `
+          <div class="question-statement">${q.statement}</div>
+          <div class="options-grid">
+            ${answersHtml}
+          </div>
+        `;
+        container.appendChild(block);
+      });
+
+      // Wizard buttons visibility
+      document.getElementById('btn-diag-prev').style.visibility = wizardStep === 0 ? 'hidden' : 'visible';
+      document.getElementById('btn-diag-next').innerText = 
+        (endIdx >= diagData.reactivos.length) ? 'Finalizar Diagnóstico' : 'Siguiente';
+    }
+
+    function selectOption(qId, val, cardEl) {
+      // Unselect siblings
+      const parent = cardEl.parentElement;
+      parent.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+      
+      cardEl.classList.add('selected');
+      diagAnswers[qId] = val;
+    }
+
+    function diagPrev() {
+      if (wizardStep > 0) {
+        wizardStep--;
+        renderWizardQuestions();
+        window.scrollTo(0,0);
+      }
+    }
+
+    function diagNext() {
+      // Validate all questions on the current page are answered
+      const startIdx = wizardStep * questionsPerStep;
+      const endIdx = Math.min(startIdx + questionsPerStep, diagData.reactivos.length);
+      const slice = diagData.reactivos.slice(startIdx, endIdx);
+
+      const unanswered = slice.some(q => diagAnswers[q.id] === undefined);
+      if (unanswered) {
+        alert('Por favor responde todas las preguntas de esta página antes de continuar.');
+        return;
+      }
+
+      if (endIdx < diagData.reactivos.length) {
+        wizardStep++;
+        renderWizardQuestions();
+        window.scrollTo(0,0);
+      } else {
+        calculateAndSaveResults();
+      }
+    }
+
+    // ── 6. CALCULATIONS & METRICS ENGINE ────────────────────────
+    function calculateAndSaveResults() {
+      // Fórmulas matriciales del framework VDF
+      
+      // 1. Dimension Scores
+      const dimTotals = {};
+      const dimMaxWeights = {};
+      
+      // 2. Domain Scores
+      const domTotals = {};
+      const domMaxWeights = {};
+
+      diagData.reactivos.forEach(q => {
+        const val = diagAnswers[q.id];
+        
+        q.weights.forEach(w => {
+          const dimId = w.dimension_id;
+          const wt = w.weight;
+          
+          // Add to dimension total
+          if (!dimTotals[dimId]) dimTotals[dimId] = 0;
+          if (!dimMaxWeights[dimId]) dimMaxWeights[dimId] = 0;
+          dimTotals[dimId] += wt * val;
+          dimMaxWeights[dimId] += wt * 3; // Maximum score in Likert (3)
+
+          // Add to domain if weight maps to a domain directly or is linked through dimension
+          const domainId = getDomainForId(dimId) || dimId; // Fallback to id if direct domain
+          if (!domTotals[domainId]) domTotals[domainId] = 0;
+          if (!domMaxWeights[domainId]) domMaxWeights[domainId] = 0;
+          domTotals[domainId] += wt * val;
+          domMaxWeights[domainId] += wt * 3;
+        });
+      });
+
+      // Normalization to 0.0 - 1.0
+      const dimensionScores = {};
+      const domainScores = {};
+      
+      diagData.dimensions.forEach(dim => {
+        const raw = dimTotals[dim.id] || 0;
+        const max = dimMaxWeights[dim.id] || 1;
+        dimensionScores[dim.id] = raw / max;
+      });
+
+      diagData.domains.forEach(dom => {
+        const raw = domTotals[dom.id] || 0;
+        const max = domMaxWeights[dom.id] || 1;
+        domainScores[dom.id] = raw / max;
+      });
+
+      // Calculate Global Index (Average of Domain Scores)
+      let sumDomains = 0;
+      diagData.domains.forEach(dom => {
+        sumDomains += domainScores[dom.id];
+      });
+      const globalScore = sumDomains / diagData.domains.length;
+
+      // Map to Zone
+      const matchingZone = diagData.zones.find(z => globalScore >= z.range_min && globalScore <= z.range_max) 
+                           || diagData.zones[diagData.zones.length - 1];
+
+      // Check for Critical Crisis Items (Self-harm/Suicide for cero-amor, Physical abuse/death threat for cero-amor-paternal)
+      let hasCrisisAlert = false;
+      if (currentDiag === 'cero-amor') {
+        const crisisQuestions = ["R22", "R26", "R27", "R28"]; // suicidio, cutting, mutilación
+        crisisQuestions.forEach(qId => {
+          if (diagAnswers[qId] > 0) hasCrisisAlert = true;
+        });
+      } else if (currentDiag === 'cero-amor-paternal') {
+        const crisisQuestions = ["RV39", "RV40", "RV41", "RV42", "RV43", "RV44", "RV45", "RV46", "RV47", "RV48", "RV49", "RV50"]; // agresiones físicas, amenazas graves, sustracción, filicidio
+        crisisQuestions.forEach(qId => {
+          if (diagAnswers[qId] > 0) hasCrisisAlert = true;
+        });
+      }
+
+      // Save to Historial
+      const newResult = {
+        id: 'res_' + Date.now(),
+        date: new Date().toISOString(),
+        instrumentId: currentDiag,
+        instrumentTitle: diagData.metadata.title,
+        globalIndex: globalScore,
+        iga: currentDiag === 'cero-amor' ? globalScore : 0,
+        iba: currentDiag === 'amor-agape' ? globalScore : 0,
+        ivp: currentDiag === 'cero-amor-paternal' ? globalScore : 0,
+        zoneId: matchingZone.id,
+        zoneName: matchingZone.name,
+        zoneColor: matchingZone.color,
+        explanation: matchingZone.action_required,
+        domainScores: domainScores,
+        dimensionScores: dimensionScores,
+        answers: diagAnswers,
+        hasCrisisAlert: hasCrisisAlert
+      };
+
+      // Add to user history in localstorage
+      let users = JSON.parse(localStorage.getItem('nicomaco_users'));
+      const dbUserIdx = users.findIndex(u => u.email.toLowerCase() === currentUser.email.toLowerCase());
+      
+      if (dbUserIdx !== -1) {
+        if (!users[dbUserIdx].history) users[dbUserIdx].history = [];
+        users[dbUserIdx].history.push(newResult);
+        localStorage.setItem('nicomaco_users', JSON.stringify(users));
+        
+        // Sync current session state
+        currentUser = users[dbUserIdx];
+      }
+
+      displayResults(newResult);
+    }
+
+    function getDomainForId(dimId) {
+      if (!diagData || !diagData.dimensions) return null;
+      const dim = diagData.dimensions.find(d => d.id === dimId);
+      return dim ? dim.domain_id : null;
+    }
+
+    // ── 7. DISPLAY DIAGNOSTIC RESULTS ───────────────────────────
+    function displayResults(res) {
+      showView('results');
+
+      const scorePct = Math.round(res.globalIndex * 100);
+      document.getElementById('results-score-value').innerText = `${scorePct}%`;
+      
+      const scoreLabel = document.getElementById('results-score-label');
+      scoreLabel.innerText = res.instrumentId === 'cero-amor' ? 'Autoviolencia' : 
+                            (res.instrumentId === 'cero-amor-paternal' ? 'Violencia Vicaria' : 'Bienestar Ágape');
+
+      // Animate circular gauge
+      const gaugeFill = document.getElementById('results-gauge-fill');
+      // Dashoffset corresponds to score. stroke-dasharray is 691 (2 * PI * r)
+      const offset = 691 - (res.globalIndex * 691);
+      gaugeFill.style.strokeDashoffset = offset;
+      gaugeFill.style.stroke = res.zoneColor;
+
+      // Update badges and headlines
+      const badge = document.getElementById('results-zone-badge');
+      badge.innerText = res.zoneName;
+      badge.style.backgroundColor = `${res.zoneColor}22`;
+      badge.style.color = res.zoneColor;
+      badge.style.borderColor = `${res.zoneColor}55`;
+
+      document.getElementById('results-headline').innerText = res.zoneName.split(':')[1] || res.zoneName;
+      document.getElementById('results-explanation').innerText = res.explanation;
+
+      // Render domain bars
+      const domains = Object.keys(res.domainScores);
+      if (domains[0]) {
+        let label = 'Relación Intrapersonal';
+        if (domains[0] === 'dom_intrapersonal') label = 'Relación Intrapersonal (Valía)';
+        else if (domains[0] === 'dom_intrapersonal_agape') label = 'Relación Intrapersonal';
+        else if (domains[0] === 'dom_vicaria_indirecta_intra') label = 'Violencia Vicaria Indirecta (Psico-Legal)';
+        
+        document.getElementById('domain-name-0').innerText = label;
+        document.getElementById('domain-val-0').innerText = `${Math.round(res.domainScores[domains[0]] * 100)}%`;
+        document.getElementById('domain-fill-0').style.width = `${res.domainScores[domains[0]] * 100}%`;
+        document.getElementById('domain-fill-0').style.background = `linear-gradient(90deg, var(--purple), ${res.zoneColor})`;
+      }
+      if (domains[1]) {
+        let label = 'Relación Interpersonal';
+        if (domains[1] === 'dom_interpersonal') label = 'Relación Interpersonal (Pareja)';
+        else if (domains[1] === 'dom_interpersonal_agape') label = 'Relación Interpersonal';
+        else if (domains[1] === 'dom_vicaria_directa_inter') label = 'Violencia Vicaria Directa (Física/Extrema)';
+        
+        document.getElementById('domain-name-1').innerText = label;
+        document.getElementById('domain-val-1').innerText = `${Math.round(res.domainScores[domains[1]] * 100)}%`;
+        document.getElementById('domain-fill-1').style.width = `${res.domainScores[domains[1]] * 100}%`;
+        document.getElementById('domain-fill-1').style.background = `linear-gradient(90deg, var(--emerald), ${res.zoneColor})`;
+      }
+
+      // Compute dimension scores on the fly if missing (e.g. from mock data)
+      if (!res.dimensionScores && res.answers) {
+        const dimTotals = {};
+        const dimMaxWeights = {};
+        diagData.reactivos.forEach(q => {
+          const val = res.answers[q.id] || 0;
+          q.weights.forEach(w => {
+            const dimId = w.dimension_id;
+            const wt = w.weight;
+            if (!dimTotals[dimId]) dimTotals[dimId] = 0;
+            if (!dimMaxWeights[dimId]) dimMaxWeights[dimId] = 0;
+            dimTotals[dimId] += wt * val;
+            dimMaxWeights[dimId] += wt * 3;
+          });
+        });
+        res.dimensionScores = {};
+        diagData.dimensions.forEach(dim => {
+          const raw = dimTotals[dim.id] || 0;
+          const max = dimMaxWeights[dim.id] || 1;
+          res.dimensionScores[dim.id] = raw / max;
+        });
+      }
+
+      // Render dimension bars
+      const dimList = document.getElementById('dimension-bars-list');
+      dimList.innerHTML = '';
+      
+      // Global toggle function
+      window.toggleDimensionDetail = function(dimId) {
+        const el = document.getElementById(`detail-${dimId}`);
+        const btn = document.getElementById(`btn-toggle-${dimId}`);
+        if (el.style.display === 'none') {
+          el.style.display = 'block';
+          btn.innerText = '▲ Ocultar desglose';
+        } else {
+          el.style.display = 'none';
+          btn.innerText = '▼ Ver desglose';
+        }
+      };
+
+      if (res.dimensionScores && diagData.dimensions) {
+        Object.keys(res.dimensionScores).forEach(dimId => {
+          const score = res.dimensionScores[dimId];
+          const dim = diagData.dimensions.find(d => d.id === dimId);
+          if (dim) {
+            const pct = Math.round(score * 100);
+            
+            // Calculate active reactivos and their sum
+            let sumRaw = 0;
+            let sumMax = 0;
+            const activeReactivos = diagData.reactivos.filter(q => 
+              q.weights.some(w => w.dimension_id === dimId)
+            );
+            
+            let reactivosHtml = activeReactivos.map((q, idx) => {
+              const weight = q.weights.find(w => w.dimension_id === dimId).weight;
+              const val = res.answers[q.id] || 0;
+              const rawCont = (val * weight).toFixed(1);
+              sumRaw += val * weight;
+              sumMax += 3 * weight;
+              
+              const scale = diagData.response_scales[q.scale_id];
+              const opt = scale.find(o => o.value === val);
+              const label = opt ? opt.label : 'Sin responder';
+              
+              return `
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; font-size:0.75rem; border-bottom:1px solid rgba(255,255,255,0.03); padding:0.4rem 0; gap:1rem;">
+                  <span style="color:var(--text-muted); flex:1;"><strong style="color:var(--purple); font-size:0.7rem; margin-right:0.25rem;">[${q.id}]</strong> ${q.statement}</span>
+                  <span style="color:white; white-space:nowrap; text-align:right; font-family:monospace;">
+                    ${label} (${val}) &times; Peso: ${weight} = <strong style="color:#34D399;">${rawCont}</strong>
+                  </span>
+                </div>
+              `;
+            }).join('');
+            
+            const formulaText = `
+              <div style="margin-top:0.75rem; padding-top:0.5rem; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:space-between; font-size:0.75rem; font-weight:600; color:#C4B5FD; font-family:monospace; flex-wrap:wrap; gap:0.5rem;">
+                <span>Suma Ponderada: ${sumRaw.toFixed(1)} / Máx: ${sumMax.toFixed(1)}</span>
+                <span>Fórmula: (${sumRaw.toFixed(1)} ÷ ${sumMax.toFixed(1)}) &times; 100 = ${pct}%</span>
+              </div>
+            `;
+
+            const item = document.createElement('div');
+            item.className = 'domain-bar-item';
+            item.style.marginBottom = '1.25rem';
+            item.innerHTML = `
+              <div class="domain-bar-header" style="cursor:pointer; display:flex; justify-content:space-between; align-items:center;" onclick="toggleDimensionDetail('${dimId}')">
+                <span class="domain-bar-name" style="font-size:0.85rem; font-weight:600; display:flex; align-items:center; gap:0.6rem;">
+                  ${dim.name}
+                  <span id="btn-toggle-${dimId}" style="font-size:0.68rem; color:var(--purple); font-weight:500;">▼ Ver desglose</span>
+                </span>
+                <span class="domain-bar-value" style="font-size:0.85rem; font-weight:600;">${pct}%</span>
+              </div>
+              <div class="domain-bar-track" style="height:8px; cursor:pointer; margin-top:0.3rem;" onclick="toggleDimensionDetail('${dimId}')">
+                <div class="domain-bar-fill" style="width:${pct}%; background:linear-gradient(90deg, var(--purple-dark), var(--purple));"></div>
+              </div>
+              
+              <!-- Accordion detail list -->
+              <div class="dimension-detail" id="detail-${dimId}" style="display:none; margin-top:0.75rem; padding:0.75rem 1.25rem; background:rgba(0,0,0,0.25); border-radius:12px; border:1px solid var(--border);">
+                <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted); font-weight:600; border-bottom:1px solid var(--border); padding-bottom:0.3rem; margin-bottom:0.3rem;">
+                  <span>REACTIVO / PREGUNTA</span>
+                  <span>RESPUESTA &times; PESO = VALOR PONDERADO</span>
+                </div>
+                ${reactivosHtml}
+                ${formulaText}
+              </div>
+            `;
+            dimList.appendChild(item);
+          }
+        });
+      }
+
+      // Update Formula display text based on instrument
+      const formulaMath = document.getElementById('formula-display-math');
+      
+      let intraKey = domains.find(k => k.includes('intra'));
+      let interKey = domains.find(k => k.includes('inter'));
+      
+      const intraPct = Math.round((res.domainScores[intraKey] || 0) * 100);
+      const interPct = Math.round((res.domainScores[interKey] || 0) * 100);
+      const finalPct = Math.round(res.globalIndex * 100);
+      
+      const isCeroAmor = res.instrumentId === 'cero-amor';
+      const isCeroAmorPaternal = res.instrumentId === 'cero-amor-paternal';
+      const formulaName = isCeroAmor ? 'IGA' : (isCeroAmorPaternal ? 'IVP' : 'IBA');
+      const labelIntra = isCeroAmor ? 'Intrapersonal' : (isCeroAmorPaternal ? 'V. Indirecta' : 'Autocuidado');
+      const labelInter = isCeroAmor ? 'Interpersonal' : (isCeroAmorPaternal ? 'V. Directa' : 'Vínculo');
+
+      formulaMath.innerHTML = `
+        <div style="font-size: 1.05rem; font-weight: bold; margin-bottom: 0.5rem; color: #C4B5FD; font-family: monospace;">
+          ${formulaName} = (${labelIntra} + ${labelInter}) / 2
+        </div>
+        <div style="font-size: 0.88rem; color: var(--text-muted); font-family: monospace;">
+          (${intraPct}% + ${interPct}%) / 2 = <strong style="color: white;">${finalPct}%</strong>
+        </div>
+      `;
+
+      // Show Crisis alert if active
+      document.getElementById('results-crisis-banner').style.display = res.hasCrisisAlert ? 'flex' : 'none';
+    }
+
+    function viewPastResult(resultId) {
+      const res = currentUser.history.find(h => h.id === resultId);
+      if (!res) return;
+      
+      // Load diagnostic spec first to resolve labels
+      const url = res.instrumentId === 'cero-amor' ? 'cero_amor.json' : 
+                  (res.instrumentId === 'cero-amor-paternal' ? 'cero_amor_paternal.json' : 'amor_agape.json');
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          diagData = data;
+          displayResults(res);
+        });
+    }
+
+    function printResults() {
+      window.print();
+    }
+
+    // ── 8. ADMIN DASHBOARD & ANALYTICS PANEL ────────────────────
+    function renderAdminDashboard() {
+      const users = JSON.parse(localStorage.getItem('nicomaco_users')) || [];
+      const regularUsers = users.filter(u => u.role !== 'admin');
+      
+      document.getElementById('admin-stat-total-users').innerText = regularUsers.length;
+      
+      let totalExams = 0;
+      let sumScores = 0;
+      let redOrCriticalCount = 0;
+      
+      const zoneCounts = { verde: 0, amarilla: 0, roja: 0, critica: 0 };
+      const criticalReactivoHits = { R22: 0, R26: 0, R27: 0, R28: 0, RV42: 0, RV47: 0, RV50: 0 };
+      
+      regularUsers.forEach(u => {
+        if (u.history && u.history.length > 0) {
+          totalExams += u.history.length;
+          
+          // Get latest diagnostic score
+          const sorted = [...u.history].sort((a,b) => new Date(b.date) - new Date(a.date));
+          const latest = sorted[0];
+          sumScores += latest.globalIndex;
+          
+          if (latest.zoneId === 'zone_roja' || latest.zoneId === 'zone_critica') {
+            redOrCriticalCount++;
+          }
+
+          if (latest.zoneId.includes('verde')) zoneCounts.verde++;
+          else if (latest.zoneId.includes('amarilla') || latest.zoneId.includes('azul')) zoneCounts.amarilla++;
+          else if (latest.zoneId.includes('roja') || latest.zoneId.includes('purpura')) zoneCounts.roja++;
+          else if (latest.zoneId.includes('critica')) zoneCounts.critica++;
+
+          // Check crisis hits
+          ["R22", "R26", "R27", "R28", "RV42", "RV47", "RV50"].forEach(qId => {
+            if (latest.answers && latest.answers[qId] > 0) criticalReactivoHits[qId]++;
+          });
+        }
+      });
+
+      const avgScore = totalExams > 0 ? (sumScores / regularUsers.filter(u => u.history.length > 0).length) : 0;
+      const redPct = regularUsers.filter(u => u.history.length > 0).length > 0 ? 
+                     (redOrCriticalCount / regularUsers.filter(u => u.history.length > 0).length) : 0;
+
+      document.getElementById('admin-stat-total-exams').innerText = totalExams;
+      document.getElementById('admin-stat-avg-score').innerText = `${Math.round(avgScore * 100)}%`;
+      document.getElementById('admin-stat-red-pct').innerText = `${Math.round(redPct * 100)}%`;
+
+      // Render zone bars on chart
+      const maxCount = Math.max(zoneCounts.verde, zoneCounts.amarilla, zoneCounts.roja, zoneCounts.critica, 1);
+      
+      ['verde', 'amarilla', 'roja', 'critica'].forEach(z => {
+        const cnt = zoneCounts[z];
+        const pct = (cnt / maxCount) * 80; // Scale to fit chart container max height
+        document.getElementById(`chart-val-${z}`).innerText = cnt;
+        document.getElementById(`chart-bar-${z}`).style.height = `${pct}%`;
+      });
+
+      // Render critical items list
+      const criticalList = document.getElementById('admin-critical-alerts-list');
+      criticalList.innerHTML = '';
+      
+      const statements = {
+        R22: "Ideación suicida (Me amenazo con matarme)",
+        R26: "Cutting (Me corto)",
+        R27: "Mutilación de tejidos",
+        R28: "Intento directo de suicidio",
+        RV42: "Amenazas de muerte infantil (Vicaria)",
+        RV47: "Abuso sexual infantil (Vicaria)",
+        RV50: "Atentar contra la vida / Filicidio (Vicaria)"
+      };
+
+      Object.keys(criticalReactivoHits).forEach(qId => {
+        const hits = criticalReactivoHits[qId];
+        const pct = regularUsers.filter(u => u.history.length > 0).length > 0 ? 
+                    (hits / regularUsers.filter(u => u.history.length > 0).length) * 100 : 0;
+        
+        const row = document.createElement('div');
+        row.className = `critical-alert-row ${activeCriticalFilter === qId ? 'active' : ''}`;
+        row.setAttribute('onclick', `toggleCriticalFilter('${qId}')`);
+        row.innerHTML = `
+          <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:0.25rem;">
+            <span><strong>${qId}:</strong> ${statements[qId]}</span>
+            <span style="color:${hits > 0 ? 'var(--red)' : '#888'}">${hits} usuarios (${Math.round(pct)}%)</span>
+          </div>
+          <div class="domain-bar-track" style="height:6px;">
+            <div class="domain-bar-fill" style="width:${pct}%; background:var(--red);"></div>
+          </div>
+        `;
+        criticalList.appendChild(row);
+      });
+
+      // Render table and apply filters
+      filterAdminTable();
+    }
+
+    function renderAdminTable(usersList) {
+      const tbody = document.getElementById('admin-users-table');
+      tbody.innerHTML = '';
+
+      if (usersList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">No hay usuarios registrados que coincidan con la búsqueda.</td></tr>`;
+        return;
+      }
+
+      usersList.forEach(u => {
+        const latestExam = u.history && u.history.length > 0 ? 
+                           [...u.history].sort((a,b) => new Date(b.date) - new Date(a.date))[0] : null;
+        
+        const dateStr = latestExam ? new Date(latestExam.date).toLocaleDateString() : '-';
+        const scoreStr = latestExam ? `${Math.round(latestExam.globalIndex * 100)}%` : '-';
+        const zoneBadge = latestExam ? 
+          `<span class="badge-zone ${getZoneClass(latestExam.zoneId)}">${latestExam.zoneName.split(':')[0]}</span>` : 
+          `<span style="color:var(--text-muted)">Pendiente</span>`;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${u.name}</strong></td>
+          <td>${u.email}</td>
+          <td>${latestExam ? latestExam.instrumentTitle : '-'}</td>
+          <td>${dateStr}</td>
+          <td>${zoneBadge}</td>
+          <td>
+            <div style="display:flex; gap:0.5rem;">
+              ${latestExam ? `<button class="btn-action primary" style="padding:0.3rem 0.8rem; font-size:0.75rem;" onclick="viewUserDetail('${u.email}', '${latestExam.id}')">Inspeccionar</button>` : ''}
+              <a href="mailto:${u.email}" class="btn-action secondary" style="padding:0.3rem 0.8rem; font-size:0.75rem; text-decoration:none;">Contacto</a>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterAdminTable() {
+      const search = document.getElementById('admin-search').value.toLowerCase();
+      const zoneFilter = document.getElementById('admin-filter-zone').value;
+      const users = JSON.parse(localStorage.getItem('nicomaco_users')) || [];
+      const regularUsers = users.filter(u => u.role !== 'admin');
+
+      const filtered = regularUsers.filter(u => {
+        const nameMatch = u.name.toLowerCase().includes(search) || u.email.toLowerCase().includes(search);
+        
+        const latestExam = u.history && u.history.length > 0 ? 
+                           [...u.history].sort((a,b) => new Date(b.date) - new Date(a.date))[0] : null;
+        
+        let zoneMatch = true;
+        if (zoneFilter !== 'all') {
+          if (!latestExam) {
+            zoneMatch = false;
+          } else {
+            const zClass = getZoneClass(latestExam.zoneId);
+            zoneMatch = (zClass === zoneFilter);
+          }
+        }
+
+        let criticalMatch = true;
+        if (activeCriticalFilter) {
+          if (!latestExam || !latestExam.answers || !(latestExam.answers[activeCriticalFilter] > 0)) {
+            criticalMatch = false;
+          }
+        }
+
+        return nameMatch && zoneMatch && criticalMatch;
+      });
+
+      // Update header title with pill
+      const titleEl = document.getElementById('admin-table-title');
+      if (titleEl) {
+        if (activeCriticalFilter) {
+          titleEl.innerHTML = `Lista de Usuarios <span class="filter-pill" onclick="clearCriticalFilter(event)">Filtrado por ${activeCriticalFilter} <span style="margin-left:4px; font-weight:bold;">✕</span></span>`;
+        } else {
+          titleEl.innerHTML = `Lista de Usuarios`;
+        }
+      }
+
+      renderAdminTable(filtered);
+    }
+
+    function toggleCriticalFilter(qId) {
+      if (activeCriticalFilter === qId) {
+        activeCriticalFilter = null;
+      } else {
+        activeCriticalFilter = qId;
+      }
+      renderAdminDashboard();
+    }
+
+    function clearCriticalFilter(e) {
+      if (e) e.stopPropagation();
+      activeCriticalFilter = null;
+      renderAdminDashboard();
+    }
+
+    // ── 9. ADMIN MODAL INSPECTION ───────────────────────────────
+    function viewUserDetail(email, examId) {
+      const users = JSON.parse(localStorage.getItem('nicomaco_users')) || [];
+      const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+      if (!user) return;
+
+      const exam = user.history.find(h => h.id === examId);
+      if (!exam) return;
+
+      document.getElementById('modal-user-name').innerText = user.name;
+      document.getElementById('modal-user-email').innerText = user.email;
+      
+      const scorePct = Math.round(exam.globalIndex * 100);
+      const scoreEl = document.getElementById('modal-score');
+      scoreEl.innerText = `${scorePct}%`;
+      scoreEl.style.color = exam.zoneColor;
+
+      const badge = document.getElementById('modal-zone-badge');
+      badge.innerText = exam.zoneName;
+      badge.style.backgroundColor = `${exam.zoneColor}22`;
+      badge.style.color = exam.zoneColor;
+      badge.style.borderColor = `${exam.zoneColor}55`;
+
+      document.getElementById('modal-date').innerText = new Date(exam.date).toLocaleString();
+      document.getElementById('modal-instrument').innerText = exam.instrumentTitle;
+      document.getElementById('modal-contact-link').href = `mailto:${user.email}?subject=Seguimiento Clínica Nicómaco - ${exam.instrumentTitle}`;
+
+      // Render Modal Domain Bars
+      const domBars = document.getElementById('modal-domain-bars');
+      domBars.innerHTML = '';
+      Object.keys(exam.domainScores).forEach(domId => {
+        const val = exam.domainScores[domId];
+        const pct = Math.round(val * 100);
+        const barItem = document.createElement('div');
+        barItem.className = 'domain-bar-item';
+        let label = domId;
+        if (domId === 'dom_intrapersonal' || domId === 'dom_intrapersonal_agape') label = 'Relación Intrapersonal';
+        else if (domId === 'dom_interpersonal' || domId === 'dom_interpersonal_agape') label = 'Relación Interpersonal';
+        else if (domId === 'dom_vicaria_indirecta_intra') label = 'Violencia Vicaria Indirecta';
+        else if (domId === 'dom_vicaria_directa_inter') label = 'Violencia Vicaria Directa';
+
+        barItem.innerHTML = `
+          <div class="domain-bar-header">
+            <span class="domain-bar-name">${label}</span>
+            <span class="domain-bar-value">${pct}%</span>
+          </div>
+          <div class="domain-bar-track">
+            <div class="domain-bar-fill" style="width:${pct}%; background:${exam.zoneColor}"></div>
+          </div>
+        `;
+        domBars.appendChild(barItem);
+      });
+
+      // Render answers list with questions text
+      const url = exam.instrumentId === 'cero-amor' ? 'cero_amor.json' : 
+                  (exam.instrumentId === 'cero-amor-paternal' ? 'cero_amor_paternal.json' : 'amor_agape.json');
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          const answersContainer = document.getElementById('modal-answers-container');
+          answersContainer.innerHTML = '';
+
+          data.reactivos.forEach((q, index) => {
+            const ansVal = exam.answers[q.id];
+            const scale = data.response_scales[q.scale_id];
+            const opt = scale.find(o => o.value === ansVal);
+            const optLabel = opt ? opt.label : 'Sin responder';
+            
+            const div = document.createElement('div');
+            div.className = 'modal-answer-item';
+            div.innerHTML = `
+              <span class="modal-answer-num">${index + 1}</span>
+              <span class="modal-answer-text">${q.statement}</span>
+              <span class="modal-answer-val val-${ansVal}">${optLabel} (${ansVal})</span>
+            `;
+            answersContainer.appendChild(div);
+          });
+
+          // Show modal overlay
+          document.getElementById('admin-modal').style.display = 'flex';
+        });
+    }
+
+    function closeAdminModal() {
+      document.getElementById('admin-modal').style.display = 'none';
+    }
+
+    // Close modal on escape or background click
+    document.getElementById('admin-modal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('admin-modal')) {
+        closeAdminModal();
+      }
+    });
+
+    // ── 10. MOCK DATA SEEDER ─────────────────────────────────────
+    function seedMockData() {
+      let users = JSON.parse(localStorage.getItem('nicomaco_users')) || [];
+      
+      const mockUsers = [
+        {
+          name: "Sofía Pérez",
+          email: "sofia.perez@correo.com",
+          password: "password123",
+          role: "user",
+          history: [
+            {
+              id: "res_mock_1",
+              date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+              instrumentId: "cero-amor",
+              instrumentTitle: "Cero Amor - Autoviolentómetro",
+              globalIndex: 0.12,
+              iga: 0.12,
+              iba: 0.0,
+              ivp: 0.0,
+              zoneId: "zone_verde",
+              zoneName: "Zona Verde: Prevención",
+              zoneColor: "#059669",
+              explanation: "¡Date cuenta y modera! Formas leves de autoviolencia. Momento ideal para prevenir mediante la autoobservación.",
+              domainScores: { dom_intrapersonal: 0.15, dom_interpersonal: 0.09 },
+              answers: generateMockAnswers('cero-amor', 0.12)
+            }
+          ]
+        },
+        {
+          name: "Carlos Gómez",
+          email: "carlos.gomez@gmail.com",
+          password: "password123",
+          role: "user",
+          history: [
+            {
+              id: "res_mock_2",
+              date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+              instrumentId: "cero-amor",
+              instrumentTitle: "Cero Amor - Autoviolentómetro",
+              globalIndex: 0.45,
+              iga: 0.45,
+              iba: 0.0,
+              ivp: 0.0,
+              zoneId: "zone_amarilla",
+              zoneName: "Zona Amarilla: Alerta",
+              zoneColor: "#D97706",
+              explanation: "¡Reflexiona y reacciona! Autoviolencia moderada presente. Es momento de aplicar herramientas de amor propio y diálogo interno.",
+              domainScores: { dom_intrapersonal: 0.52, dom_interpersonal: 0.38 },
+              answers: generateMockAnswers('cero-amor', 0.45)
+            }
+          ]
+        },
+        {
+          name: "Mariana Ruiz",
+          email: "mariana.ruiz@hotmail.com",
+          password: "password123",
+          role: "user",
+          history: [
+            {
+              id: "res_mock_3",
+              date: new Date().toISOString(),
+              instrumentId: "cero-amor",
+              instrumentTitle: "Cero Amor - Autoviolentómetro",
+              globalIndex: 0.78,
+              iga: 0.78,
+              iba: 0.0,
+              ivp: 0.0,
+              zoneId: "zone_roja",
+              zoneName: "Zona Roja: Riesgo Severo",
+              zoneColor: "#DC2626",
+              explanation: "¡No te autodestruyas! Autoviolencia intensa. Busca apoyo psicológico profesional urgente para romper patrones destructivos.",
+              domainScores: { dom_intrapersonal: 0.85, dom_interpersonal: 0.71 },
+              answers: generateMockAnswers('cero-amor', 0.78, true) // cutting active
+            }
+          ]
+        },
+        {
+          name: "Gabriela Torres",
+          email: "gabriela.torres@gmail.com",
+          password: "password123",
+          role: "user",
+          history: [
+            {
+              id: "res_mock_4",
+              date: new Date().toISOString(),
+              instrumentId: "cero-amor-paternal",
+              instrumentTitle: "Cero Amor Paternal (Violentómetro Vicario)",
+              globalIndex: 0.68,
+              iga: 0.0,
+              iba: 0.0,
+              ivp: 0.68,
+              zoneId: "zone_roja_vicaria",
+              zoneName: "Zona Roja: Riesgo Severo",
+              zoneColor: "#DC2626",
+              explanation: "¡Peligro! Retención deliberada de menores, campañas de alienación severas y amenazas directas. Se aconseja solicitar de inmediato medidas cautelares.",
+              domainScores: { dom_vicaria_indirecta_intra: 0.75, dom_vicaria_directa_inter: 0.61 },
+              answers: generateMockAnswers('cero-amor-paternal', 0.68, true) // crisis active (death threats)
+            }
+          ]
+        }
+      ];
+
+      // Add only non-existing ones
+      mockUsers.forEach(mu => {
+        if (!users.some(u => u.email.toLowerCase() === mu.email.toLowerCase())) {
+          users.push(mu);
+        }
+      });
+
+      localStorage.setItem('nicomaco_users', JSON.stringify(users));
+      alert('Se han simulado 4 usuarios demo con diagnósticos en diferentes zonas de riesgo.');
+      renderAdminDashboard();
+    }
+
+    function generateMockAnswers(instrumentId, targetVal, seedCrisis = false) {
+      const answers = {};
+      const numQuestions = instrumentId === 'cero-amor-paternal' ? 50 : 28;
+      const prefix = instrumentId === 'cero-amor-paternal' ? 'RV' : 'R';
+      
+      for(let i = 1; i <= numQuestions; i++) {
+        const qId = prefix + (i < 10 ? "0" + i : i);
+        
+        // Random value based on target
+        let val = Math.floor(Math.random() * 3);
+        if (targetVal < 0.2) val = Math.random() > 0.7 ? 1 : 0;
+        else if (targetVal > 0.7) val = Math.random() > 0.3 ? 3 : 2;
+        
+        answers[qId] = val;
+      }
+      
+      if (instrumentId === 'cero-amor-paternal') {
+        if (seedCrisis) {
+          answers["RV42"] = 2; // amenazas de muerte
+          answers["RV47"] = 1; // abuso sexual vicario
+        } else {
+          answers["RV39"] = 0;
+          answers["RV40"] = 0;
+          answers["RV41"] = 0;
+          answers["RV42"] = 0;
+          answers["RV43"] = 0;
+          answers["RV44"] = 0;
+          answers["RV45"] = 0;
+          answers["RV46"] = 0;
+          answers["RV47"] = 0;
+          answers["RV48"] = 0;
+          answers["RV49"] = 0;
+          answers["RV50"] = 0;
+        }
+      } else {
+        if (seedCrisis) {
+          answers["R22"] = 2; // ideacion
+          answers["R26"] = 3; // cutting
+        } else {
+          answers["R22"] = 0;
+          answers["R26"] = 0;
+          answers["R27"] = 0;
+          answers["R28"] = 0;
+        }
+      }
+      return answers;
+    }
+
+    // ── 11. INITIALIZATION ──────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+      // Direct access from landing page, showing auth panel
+      showView('auth');
+    });
+
+  </script>
+</body>
+</html>

@@ -1,5 +1,8 @@
 node_modules/
-.vercel/
-*.log
+build/
+dist/
+coverage/
 .DS_Store
-Thumbs.db
+*.log
+.env*
+!.env.example

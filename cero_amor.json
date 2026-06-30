@@ -1,0 +1,525 @@
+{
+  "metadata": {
+    "id": "cero-amor",
+    "title": "Cero Amor - Autoviolentómetro",
+    "version": "1.0.0",
+    "author": "Blanca Estela Angulo López",
+    "registration": "Reg. No. 03-2025-101713061400-01",
+    "description": "Herramienta de datos compilatorios de la autoviolencia que ejercemos, nos posiciona y ayuda a visibilizar nuestras realidades en comandos tóxicos en la relación intrapersonal."
+  },
+  "domains": [
+    {
+      "id": "dom_intrapersonal",
+      "name": "Relación Intrapersonal",
+      "description": "Evaluación del diálogo interno, la autopercepción y la relación directa con uno mismo.",
+      "weight": 1.0
+    },
+    {
+      "id": "dom_interpersonal",
+      "name": "Relación Interpersonal / Pareja",
+      "description": "Evaluación de cómo la autoviolencia se ve influenciada, facilitada o proyectada en las interacciones y dinámicas de relación.",
+      "weight": 1.0
+    }
+  ],
+  "dimensions": [
+    {
+      "id": "dim_psicologica_emocional",
+      "name": "Psicológica y Emocional",
+      "domain_id": "dom_intrapersonal",
+      "description": "Manifestaciones cognitivas y emocionales de autodevaluación y maltrato psicológico autoinfligido.",
+      "weight": 1.0
+    },
+    {
+      "id": "dim_fisica",
+      "name": "Física y Corporal",
+      "domain_id": "dom_intrapersonal",
+      "description": "Comportamientos que dañan físicamente o descuidan activamente el bienestar del propio cuerpo.",
+      "weight": 1.0
+    },
+    {
+      "id": "dim_alto_riesgo",
+      "name": "Alto Riesgo y Autodestrucción",
+      "domain_id": "dom_intrapersonal",
+      "description": "Conductas de riesgo grave para la vida, mutilación o vulnerabilidad sexual extrema.",
+      "weight": 1.0
+    }
+  ],
+  "zones": [
+    {
+      "id": "zone_verde",
+      "name": "Zona Verde: Prevención",
+      "color": "#059669",
+      "range_min": 0.0,
+      "range_max": 0.25,
+      "action_required": "¡Date cuenta y modera! Formas leves de autoviolencia. Momento ideal para prevenir mediante la autoobservación."
+    },
+    {
+      "id": "zone_amarilla",
+      "name": "Zona Amarilla: Alerta",
+      "color": "#D97706",
+      "range_min": 0.25,
+      "range_max": 0.60,
+      "action_required": "¡Reflexiona y reacciona! Autoviolencia moderada presente. Es momento de aplicar herramientas de amor propio y diálogo interno."
+    },
+    {
+      "id": "zone_roja",
+      "name": "Zona Roja: Riesgo Severo",
+      "color": "#DC2626",
+      "range_min": 0.60,
+      "range_max": 0.85,
+      "action_required": "¡No te autodestruyas! Autoviolencia intensa. Busca apoyo psicológico profesional urgente para romper patrones destructivos."
+    },
+    {
+      "id": "zone_critica",
+      "name": "Zona Crítica: Emergencia",
+      "color": "#7F1D1D",
+      "range_min": 0.85,
+      "range_max": 1.0,
+      "action_required": "¡Necesitas ayuda YA! Riesgo real de daño irreparable o suicidio. Llama hoy mismo a una línea de crisis (SAPTEL o Línea de la Vida)."
+    }
+  ],
+  "levels": [
+    {
+      "step": 1,
+      "name": "Me hiero / critico",
+      "zone_id": "zone_verde",
+      "description": "Juicios de valor severos sobre las propias capacidades u apariencia física."
+    },
+    {
+      "step": 2,
+      "name": "Me presiono / coacciono",
+      "zone_id": "zone_verde",
+      "description": "Exigencias desmedidas de productividad o metas inalcanzables que generan ansiedad."
+    },
+    {
+      "step": 3,
+      "name": "Me miento / engaño",
+      "zone_id": "zone_verde",
+      "description": "Negación de sentimientos o justificación de conductas de otros que causan dolor."
+    },
+    {
+      "step": 4,
+      "name": "Me ignoro / lo callo",
+      "zone_id": "zone_verde",
+      "description": "Reprimir opiniones y necesidades para evitar la confrontación externa."
+    },
+    {
+      "step": 5,
+      "name": "Desconfianza / inseguridad de mí mismo",
+      "zone_id": "zone_verde",
+      "description": "Dependencia absoluta de la validación externa para tomar decisiones."
+    },
+    {
+      "step": 6,
+      "name": "Me culpabilizo",
+      "zone_id": "zone_amarilla",
+      "description": "Asumir responsabilidad por los estados emocionales o fracasos de los demás."
+    },
+    {
+      "step": 7,
+      "name": "Me descalifico / desvalorizo",
+      "zone_id": "zone_amarilla",
+      "description": "Minimizar sistemáticamente los propios logros y virtudes personales."
+    },
+    {
+      "step": 8,
+      "name": "Me ofendo / ridiculizo",
+      "zone_id": "zone_amarilla",
+      "description": "Uso de sobrenombres hirientes o bromas pesadas hacia uno mismo en público o privado."
+    },
+    {
+      "step": 9,
+      "name": "Me humillo ante otros",
+      "zone_id": "zone_amarilla",
+      "description": "Permitir tratos indignos en público con tal de no perder la aceptación ajena."
+    },
+    {
+      "step": 10,
+      "name": "Me intimido / asusto",
+      "zone_id": "zone_amarilla",
+      "description": "Pensamientos catastróficos recurrentes sobre el propio valor o futuro."
+    },
+    {
+      "step": 11,
+      "name": "Me prohíbo / limito",
+      "zone_id": "zone_amarilla",
+      "description": "Autoexclusión de oportunidades de felicidad, crecimiento académico o profesional."
+    },
+    {
+      "step": 12,
+      "name": "Destruyo mis artículos personales",
+      "zone_id": "zone_amarilla",
+      "description": "Vandalizar las propias pertenencias en momentos de ira o frustración."
+    },
+    {
+      "step": 13,
+      "name": "No respeto mi cuerpo",
+      "zone_id": "zone_amarilla",
+      "description": "Negación del descanso elemental, privación del sueño, o alimentación perjudicial."
+    },
+    {
+      "step": 14,
+      "name": "Me acaricio agresivamente",
+      "zone_id": "zone_amarilla",
+      "description": "Contacto físico propio brusco que genera dolor sutil sin llegar a marcar."
+    },
+    {
+      "step": 15,
+      "name": "Me golpeo 'jugando'",
+      "zone_id": "zone_roja",
+      "description": "Impactos físicos autoinfligidos justificados bajo el humor o la torpeza."
+    },
+    {
+      "step": 16,
+      "name": "Me araño / pellizco",
+      "zone_id": "zone_roja",
+      "description": "Lesiones dérmicas autoinfligidas como respuesta a la frustración emocional."
+    },
+    {
+      "step": 17,
+      "name": "Me jaloneo / me arrojo",
+      "zone_id": "zone_roja",
+      "description": "Tracción brusca de extremidades o caídas auto-propiciadas."
+    },
+    {
+      "step": 18,
+      "name": "Me cacheteo",
+      "zone_id": "zone_roja",
+      "description": "Golpes en el rostro autoinfligidos en situaciones de crisis de ansiedad o enojo."
+    },
+    {
+      "step": 19,
+      "name": "Me pateo",
+      "zone_id": "zone_roja",
+      "description": "Contusiones intencionales en las piernas u otras zonas accesibles."
+    },
+    {
+      "step": 20,
+      "name": "Me aíslo / encierro",
+      "zone_id": "zone_roja",
+      "description": "Confinamiento físico absoluto cortando la comunicación con redes de apoyo."
+    },
+    {
+      "step": 21,
+      "name": "Intento dañarme con objetos",
+      "zone_id": "zone_roja",
+      "description": "Manipulación peligrosa de herramientas o utensilios con fin punzocortante."
+    },
+    {
+      "step": 22,
+      "name": "Me amenazo con matarme",
+      "zone_id": "zone_critica",
+      "description": "Ideación suicida estructurada en el diálogo interno."
+    },
+    {
+      "step": 23,
+      "name": "Me forzo a una relación sexual no deseada",
+      "zone_id": "zone_critica",
+      "description": "Someterse a la cópula con la pareja sin deseo genuino, bajo presión o coerción indirecta."
+    },
+    {
+      "step": 24,
+      "name": "Sumiso/a sexual",
+      "zone_id": "zone_critica",
+      "description": "Aceptación pasiva de prácticas sexuales dolorosas o denigrantes."
+    },
+    {
+      "step": 25,
+      "name": "Me autoagredo sexualmente",
+      "zone_id": "zone_critica",
+      "description": "Daño físico infligido en zonas íntimas."
+    },
+    {
+      "step": 26,
+      "name": "Me corto (cutting)",
+      "zone_id": "zone_critica",
+      "description": "Incisiones dérmicas con navajas u otros filos como mecanismo de regulación afectiva."
+    },
+    {
+      "step": 27,
+      "name": "Me mutilo",
+      "zone_id": "zone_critica",
+      "description": "Destrucción permanente o alteración severa de tejidos corporales."
+    },
+    {
+      "step": 28,
+      "name": "Me suicido o lo intento",
+      "zone_id": "zone_critica",
+      "description": "Acción directa ejecutada con intención letal."
+    }
+  ],
+  "response_scales": {
+    "likert_4": [
+      { "value": 0, "label": "Nunca" },
+      { "value": 1, "label": "Poco" },
+      { "value": 2, "label": "Moderado" },
+      { "value": 3, "label": "Mucho" }
+    ]
+  },
+  "reactivos": [
+    {
+      "id": "R01",
+      "statement": "Siento la necesidad constante de criticar mis acciones, apariencia o decisiones, hiriendo mi autoestima.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_psicologica_emocional", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R02",
+      "statement": "Me coacciono y me exijo niveles de desempeño extremos que me generan ansiedad y malestar.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_psicologica_emocional", "weight": 0.8 },
+        { "dimension_id": "dom_intrapersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R03",
+      "statement": "Me miento a mí mismo/a ocultando mis verdaderos sentimientos o justificando tratos dañinos de otros.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_psicologica_emocional", "weight": 0.9 },
+        { "dimension_id": "dom_intrapersonal", "weight": 0.7 },
+        { "dimension_id": "dom_interpersonal", "weight": 0.8 }
+      ]
+    },
+    {
+      "id": "R04",
+      "statement": "Prefiero callar e ignorar mis propias necesidades y opiniones para no generar problemas o incomodar.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_psicologica_emocional", "weight": 0.9 },
+        { "dimension_id": "dom_intrapersonal", "weight": 0.8 },
+        { "dimension_id": "dom_interpersonal", "weight": 0.9 }
+      ]
+    },
+    {
+      "id": "R05",
+      "statement": "Desconfío de mis capacidades y dependo fuertemente de la opinión y validación de los demás para sentirme seguro/a.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_psicologica_emocional", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal", "weight": 0.9 },
+        { "dimension_id": "dom_interpersonal", "weight": 0.6 }
+      ]
+    },
+    {
+      "id": "R06",
+      "statement": "Me culpo y me hago responsable de las discusiones, problemas o de la felicidad de las personas que me rodean.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_psicologica_emocional", "weight": 0.9 },
+        { "dimension_id": "dom_intrapersonal", "weight": 0.7 },
+        { "dimension_id": "dom_interpersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R07",
+      "statement": "Desvalorizo mis logros y me descalifico, sintiendo que no merezco las cosas buenas que me suceden.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_psicologica_emocional", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R08",
+      "statement": "Me dirijo a mí mismo/a con insultos o apodos despectivos de forma interna o externa.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_psicologica_emocional", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R09",
+      "statement": "Me pongo en situaciones de humillación frente a otros con tal de complacer a mi pareja o círculo social.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_psicologica_emocional", "weight": 0.9 },
+        { "dimension_id": "dom_intrapersonal", "weight": 0.6 },
+        { "dimension_id": "dom_interpersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R10",
+      "statement": "Me asusto o intimido visualizando escenarios catastróficos sobre mi vida, salud o relaciones.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_psicologica_emocional", "weight": 0.8 },
+        { "dimension_id": "dom_intrapersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R11",
+      "statement": "Me prohíbo realizar actividades que me apasionan o convivir con personas por temor a la reacción de mi pareja o mía.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_psicologica_emocional", "weight": 0.7 },
+        { "dimension_id": "dom_intrapersonal", "weight": 0.7 },
+        { "dimension_id": "dom_interpersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R12",
+      "statement": "Destruyo o daño mis pertenencias, ropa, cartas o recuerdos en episodios de enojo o desesperación.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_fisica", "weight": 0.8 },
+        { "dimension_id": "dom_intrapersonal", "weight": 0.9 },
+        { "dimension_id": "dom_interpersonal", "weight": 0.5 }
+      ]
+    },
+    {
+      "id": "R13",
+      "statement": "Desatiendo conscientemente mi salud, higiene, alimentación o necesidades básicas de descanso.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_psicologica_emocional", "weight": 0.5 },
+        { "dimension_id": "dim_fisica", "weight": 0.9 },
+        { "dimension_id": "dom_intrapersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R14",
+      "statement": "Toco mi cuerpo o cara de forma tosca, agresiva o dolorosa al sentirme frustrado/a.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_fisica", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R15",
+      "statement": "Me golpeo (en la cabeza u otras partes del cuerpo) fingiendo que es parte de una broma o por torpeza.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_fisica", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R16",
+      "statement": "Me araño, pellizco o muerdo la piel hasta causarme dolor en momentos de tensión o enojo.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_fisica", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R17",
+      "statement": "Me jaloneo del cabello, me estiro los dedos bruscamente o me empujo contra las paredes.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_fisica", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R18",
+      "statement": "Me he dado cachetadas en la cara en momentos de descontrol emocional.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_fisica", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R19",
+      "statement": "Me pateo o me provoco moretones intencionalmente como castigo físico.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_fisica", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R20",
+      "statement": "Me aíslo del mundo exterior, me encierro en habitaciones y evito hablar con familiares o amigos.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_psicologica_emocional", "weight": 0.7 },
+        { "dimension_id": "dim_fisica", "weight": 0.8 },
+        { "dimension_id": "dom_intrapersonal", "weight": 0.8 },
+        { "dimension_id": "dom_interpersonal", "weight": 0.9 }
+      ]
+    },
+    {
+      "id": "R21",
+      "statement": "He intentado agredirme utilizando agujas, navajas, encendedores u otros objetos domésticos.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_fisica", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R22",
+      "statement": "Tengo pensamientos donde considero o me amenazo con terminar con mi vida si las circunstancias no cambian.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_alto_riesgo", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R23",
+      "statement": "Cedo a tener relaciones sexuales con mi pareja sin desearlo genuinamente, por miedo, culpa o insistencia.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_alto_riesgo", "weight": 0.9 },
+        { "dimension_id": "dom_intrapersonal", "weight": 0.6 },
+        { "dimension_id": "dom_interpersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R24",
+      "statement": "Acepto prácticas sexuales que me desagradan o lastiman físicamente con tal de complacer a mi pareja.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_alto_riesgo", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal", "weight": 0.5 },
+        { "dimension_id": "dom_interpersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R25",
+      "statement": "Me he provocado lesiones de forma intencionada en mis zonas íntimas.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_alto_riesgo", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R26",
+      "statement": "Me realizo cortes intencionados en la piel (cutting) para liberar dolor emocional o estrés.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_alto_riesgo", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R27",
+      "statement": "He dañado permanentemente alguna parte de mi cuerpo o me he mutilado intencionadamente.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_alto_riesgo", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "R28",
+      "statement": "He realizado intentos directos de suicidio para terminar con mi existencia.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_alto_riesgo", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal", "weight": 1.0 }
+      ]
+    }
+  ]
+}

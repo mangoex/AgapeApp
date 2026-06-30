@@ -1,0 +1,402 @@
+{
+  "metadata": {
+    "id": "amor-agape",
+    "title": "Amor Ágape - Amorómetro",
+    "version": "1.0.0",
+    "author": "Blanca Estela Angulo López",
+    "registration": "Reg. No. 03-2025-032611401300-01",
+    "description": "Sistema innovador de evaluación y desarrollo basado en una escala progresiva de 30 niveles específicos del desarrollo amoroso organizados en tres fases diferenciadas."
+  },
+  "domains": [
+    {
+      "id": "dom_intrapersonal_agape",
+      "name": "Relación Intrapersonal Sana",
+      "description": "Evaluación del amor propio, el autocuidado, el autoperdón y el diálogo interno compasivo.",
+      "weight": 1.0
+    },
+    {
+      "id": "dom_interpersonal_agape",
+      "name": "Relación Interpersonal Armónica",
+      "description": "Evaluación de la asertividad, la empatía, el perdón y el afecto compartido en pareja.",
+      "weight": 1.0
+    }
+  ],
+  "dimensions": [
+    {
+      "id": "dim_conexion_cognitiva",
+      "name": "Conexión Cognitiva y Resiliencia",
+      "description": "Procesos mentales de aceptación, autocrítica constructiva, honestidad y perdón.",
+      "domain_id": "dom_intrapersonal_agape",
+      "weight": 1.0
+    },
+    {
+      "id": "dim_afecto_emocional",
+      "name": "Afecto Emocional y Validación",
+      "description": "Expresiones afectivas, validación, compasión y apapacho hacia uno mismo y hacia los demás.",
+      "domain_id": "dom_intrapersonal_agape",
+      "weight": 1.0
+    },
+    {
+      "id": "dim_accion_conductual",
+      "name": "Acción Conductual y Límites",
+      "description": "Acciones concretas de cuidado físico, contacto respetuoso, actos de bondad y límites asertivos.",
+      "domain_id": "dom_intrapersonal_agape",
+      "weight": 1.0
+    }
+  ],
+  "zones": [
+    {
+      "id": "zone_verde_agape",
+      "name": "Zona Verde: Amor Práctico",
+      "color": "#10B981",
+      "range_min": 0.0,
+      "range_max": 0.35,
+      "action_required": "Relación Práctica. Has identificado tus áreas de oportunidad básicas. Trabaja en la asertividad y la comunicación elemental."
+    },
+    {
+      "id": "zone_amarilla_agape",
+      "name": "Zona Amarilla: Amor Diario",
+      "color": "#3B82F6",
+      "range_min": 0.35,
+      "range_max": 0.70,
+      "action_required": "Construcción en el Amor Diario. Existe una sólida base de afecto y cuidado corporal. Fortalece el diálogo y la empatía activa."
+    },
+    {
+      "id": "zone_roja_agape",
+      "name": "Zona Roja: Amor Edificado",
+      "color": "#8B5CF6",
+      "range_min": 0.70,
+      "range_max": 1.0,
+      "action_required": "El Amor se Edifica. Cuentas con un nivel de madurez emocional excelente, caracterizado por el perdón, la compasión y el Amor Ágape pleno."
+    }
+  ],
+  "levels": [
+    { "step": 1, "name": "Crítica constructiva", "zone_id": "zone_verde_agape", "description": "Reconocer las áreas de mejora propias y de la relación sin juicios destructivos." },
+    { "step": 2, "name": "Acordar, Conciliar", "zone_id": "zone_verde_agape", "description": "Capacidad para negociar y ceder en el plano intrapersonal e interpersonal." },
+    { "step": 3, "name": "Honestidad, Desentojar", "zone_id": "zone_verde_agape", "description": "Expresarse con la verdad y liberar tensiones o enojos de forma saludable." },
+    { "step": 4, "name": "Atender y comunicar", "zone_id": "zone_verde_agape", "description": "Escucha activa y expresión clara de las necesidades psicoafectivas." },
+    { "step": 5, "name": "Confiar, Valorar", "zone_id": "zone_verde_agape", "description": "Seguridad en las propias capacidades y aprecio sincero de las cualidades del otro." },
+    { "step": 6, "name": "Asumir Responsabilidad", "zone_id": "zone_verde_agape", "description": "Locus de control interno: responsabilizarse de las propias emociones y acciones." },
+    { "step": 7, "name": "Validar", "zone_id": "zone_verde_agape", "description": "Reconocer como legítimas las emociones y experiencias propias y de la pareja." },
+    { "step": 8, "name": "Elogiar", "zone_id": "zone_verde_agape", "description": "Expresar halagos verbales sinceros que refuercen la autoestima." },
+    { "step": 9, "name": "Valorar y Reconocer", "zone_id": "zone_verde_agape", "description": "Agradecer explícitamente las contribuciones y esfuerzos cotidianos." },
+    { "step": 10, "name": "Envolvimiento y salvaguardar", "zone_id": "zone_verde_agape", "description": "Crear un entorno seguro y de mutua protección emocional." },
+    { "step": 11, "name": "Respetar", "zone_id": "zone_amarilla_agape", "description": "Respeto absoluto a la dignidad humana, límites corporales e individuales." },
+    { "step": 12, "name": "Autorizar y permitir", "zone_id": "zone_amarilla_agape", "description": "Facilitar el crecimiento del otro sin dinámicas de control o celos." },
+    { "step": 13, "name": "Cuidar artículos personales", "zone_id": "zone_amarilla_agape", "description": "Protección de los espacios personales y pertenencias como señal de respeto mutuo." },
+    { "step": 14, "name": "Contacto y cercanía", "zone_id": "zone_amarilla_agape", "description": "Presencia física de apoyo en momentos de vulnerabilidad." },
+    { "step": 15, "name": "Caricias Amorosas", "zone_id": "zone_amarilla_agape", "description": "Contacto físico no invasivo que comunica ternura y afecto sincero." },
+    { "step": 16, "name": "Contacto Amoroso", "zone_id": "zone_amarilla_agape", "description": "Gestos corporales afectuosos que consolidan el apego seguro." },
+    { "step": 17, "name": "Apapachar", "zone_id": "zone_amarilla_agape", "description": "Abrazo del alma: cobijar emocional y físicamente con ternura." },
+    { "step": 18, "name": "Abrazar y proteger", "zone_id": "zone_amarilla_agape", "description": "Contención física recíproca ante las dificultades del entorno." },
+    { "step": 19, "name": "Comunicar desde el amor", "zone_id": "zone_amarilla_agape", "description": "Hablar de forma constructiva, amable y con un tono afectuoso." },
+    { "step": 20, "name": "Comunicar mi dolor", "zone_id": "zone_amarilla_agape", "description": "Vulnerabilidad asertiva: expresar heridas y tristezas sin atacar." },
+    { "step": 21, "name": "Libertad y acercamiento", "zone_id": "zone_roja_agape", "description": "Equilibrio entre la autonomía individual y la intimidad compartida." },
+    { "step": 22, "name": "Fortalecer y Regalar", "zone_id": "zone_roja_agape", "description": "Actos generosos de dar al otro detalles que nutren la relación." },
+    { "step": 23, "name": "Perdonar", "zone_id": "zone_roja_agape", "description": "Liberar el resentimiento y reconstruir el vínculo sobre la confianza." },
+    { "step": 24, "name": "Agradecer", "zone_id": "zone_roja_agape", "description": "Práctica activa de la gratitud por la existencia del otro y de uno mismo." },
+    { "step": 25, "name": "Acto de bondad", "zone_id": "zone_roja_agape", "description": "Acciones desinteresadas para aliviar cargas u ofrecer felicidad al otro." },
+    { "step": 26, "name": "Empatizar y compasión", "zone_id": "zone_roja_agape", "description": "Acompañar el sufrimiento del otro y actuar para aliviarlo." },
+    { "step": 27, "name": "Persuadir", "zone_id": "zone_roja_agape", "description": "Motivar con amor y de forma no manipulativa hacia conductas de bienestar." },
+    { "step": 28, "name": "Cortejar", "zone_id": "zone_roja_agape", "description": "Alimentar activamente el romance y el deleite en la pareja." },
+    { "step": 29, "name": "Sexualidad compartida y Placer", "zone_id": "zone_roja_agape", "description": "Intimidad erótica consensuada, libre, placentera y recíproca." },
+    { "step": 30, "name": "Amor Ágape", "zone_id": "zone_roja_agape", "description": "Amor pleno, incondicional, trascendente y transformador." }
+  ],
+  "response_scales": {
+    "likert_4": [
+      { "value": 0, "label": "Nunca" },
+      { "value": 1, "label": "Poco" },
+      { "value": 2, "label": "Moderado" },
+      { "value": 3, "label": "Mucho" }
+    ]
+  },
+  "reactivos": [
+    {
+      "id": "RA01",
+      "statement": "Realizo críticas constructivas hacia mí mismo/a y mis errores, buscando aprender en lugar de castigarme.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_conexion_cognitiva", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA02",
+      "statement": "Busco acordar y conciliar soluciones pacíficas y equilibradas cuando tengo diferencias conmigo mismo/a o con mi pareja.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_conexion_cognitiva", "weight": 0.8 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA03",
+      "statement": "Me expreso con honestidad y desahogo mi enojo o molestia sin agredir ni guardarme resentimientos.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_conexion_cognitiva", "weight": 0.9 },
+        { "dimension_id": "dom_intrapersonal_agape", "weight": 0.8 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 0.8 }
+      ]
+    },
+    {
+      "id": "RA04",
+      "statement": "Atiendo mis necesidades emocionales y las comunico con claridad y asertividad.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_afecto_emocional", "weight": 0.9 },
+        { "dimension_id": "dom_intrapersonal_agape", "weight": 0.9 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 0.8 }
+      ]
+    },
+    {
+      "id": "RA05",
+      "statement": "Confío en mis capacidades y valoro mis virtudes y las de mi pareja de manera constante.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_conexion_cognitiva", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal_agape", "weight": 0.9 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 0.7 }
+      ]
+    },
+    {
+      "id": "RA06",
+      "statement": "Asumo la responsabilidad de mi propia felicidad y mis emociones, sin culpar a mi pareja de mi estado de ánimo.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_conexion_cognitiva", "weight": 0.9 },
+        { "dimension_id": "dom_intrapersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA07",
+      "statement": "Valido mis sentimientos y los de los demás, dándoles importancia y espacio para ser expresados.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_afecto_emocional", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal_agape", "weight": 0.8 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 0.9 }
+      ]
+    },
+    {
+      "id": "RA08",
+      "statement": "Expreso elogios sinceros y palabras de afirmación hacia mí mismo/a y hacia las personas que amo.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_afecto_emocional", "weight": 0.9 },
+        { "dimension_id": "dom_intrapersonal_agape", "weight": 0.7 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA09",
+      "statement": "Reconozco activamente el esfuerzo y el valor de las acciones que realizo y las que realiza mi pareja.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_conexion_cognitiva", "weight": 0.8 },
+        { "dimension_id": "dom_intrapersonal_agape", "weight": 0.8 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 0.9 }
+      ]
+    },
+    {
+      "id": "RA10",
+      "statement": "Protejo mi integridad y seguridad emocional, creando un entorno de salvaguarda mutuo en mi relación.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_accion_conductual", "weight": 0.9 },
+        { "dimension_id": "dom_intrapersonal_agape", "weight": 0.9 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 0.9 }
+      ]
+    },
+    {
+      "id": "RA11",
+      "statement": "Respeto la dignidad, los límites corporales y la individualidad propia y de mi pareja en todo momento.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_accion_conductual", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal_agape", "weight": 0.8 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA12",
+      "statement": "Permito y autorizo de buena gana el desarrollo independiente, académico o social de mi pareja y el mío.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_conexion_cognitiva", "weight": 0.8 },
+        { "dimension_id": "dom_intrapersonal_agape", "weight": 0.7 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA13",
+      "statement": "Cuido de mis pertenencias, mi habitación y los espacios comunes como una forma de respeto y orden personal.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_accion_conductual", "weight": 0.8 },
+        { "dimension_id": "dom_intrapersonal_agape", "weight": 0.9 }
+      ]
+    },
+    {
+      "id": "RA14",
+      "statement": "Busco el contacto físico y la cercanía emocional con mi pareja y redes de apoyo en momentos difíciles.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_accion_conductual", "weight": 0.8 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA15",
+      "statement": "Doy y recibo caricias físicas suaves y amorosas que comunican ternura y afecto.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_afecto_emocional", "weight": 0.9 },
+        { "dimension_id": "dim_accion_conductual", "weight": 0.9 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA16",
+      "statement": "Mantengo gestos y contacto corporal afectivo diario que refuerzan el vínculo íntimo de manera segura.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_accion_conductual", "weight": 0.9 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA17",
+      "statement": "Practico el apapacho (el abrazo del alma), cobijando emocionalmente a quienes quiero.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_afecto_emocional", "weight": 1.0 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 0.9 }
+      ]
+    },
+    {
+      "id": "RA18",
+      "statement": "Utilizo el abrazo físico y protector como una herramienta de contención recíproca ante las crisis.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_accion_conductual", "weight": 0.9 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA19",
+      "statement": "Me comunico con palabras amorosas y amables, evitando gritos, tonos hirientes u hostiles.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_afecto_emocional", "weight": 0.9 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA20",
+      "statement": "Expreso mi dolor y tristeza de forma vulnerable y asertiva, sin buscar herir al otro ni desquitarme.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_conexion_cognitiva", "weight": 0.8 },
+        { "dimension_id": "dim_afecto_emocional", "weight": 0.9 },
+        { "dimension_id": "dom_intrapersonal_agape", "weight": 0.8 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA21",
+      "statement": "Permito la autonomía y libertad de mi pareja y la mía, equilibrándolo con un acercamiento afectivo sano.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_conexion_cognitiva", "weight": 0.9 },
+        { "dimension_id": "dom_intrapersonal_agape", "weight": 0.9 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA22",
+      "statement": "Realizo obsequios, detalles o actos espontáneos para fortalecer y agradar a mi pareja y a mí mismo/a.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_accion_conductual", "weight": 0.8 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA23",
+      "statement": "Tengo la capacidad de perdonar errores del pasado (propios y de mi pareja) y reconstruir la confianza.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_conexion_cognitiva", "weight": 1.0 },
+        { "dimension_id": "dom_intrapersonal_agape", "weight": 0.9 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA24",
+      "statement": "Practico activamente el agradecimiento por mi vida, mi cuerpo y por las cosas buenas de mi relación.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_conexion_cognitiva", "weight": 0.9 },
+        { "dimension_id": "dom_intrapersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA25",
+      "statement": "Hago actos de bondad desinteresados para apoyar a mi pareja o círculo social cuando tienen cargas pesadas.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_accion_conductual", "weight": 1.0 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA26",
+      "statement": "Empatizo profundamente con las dificultades de los demás y actúo con compasión activa para aliviar el dolor.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_afecto_emocional", "weight": 1.0 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA27",
+      "statement": "Persuado y motivo con cariño a las personas a tomar conductas saludables, respetando su libertad de decidir.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_conexion_cognitiva", "weight": 0.8 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA28",
+      "statement": "Mantengo el cortejo, el romance y los detalles en mi relación de pareja a lo largo del tiempo.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_afecto_emocional", "weight": 0.8 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA29",
+      "statement": "Disfruto de una sexualidad compartida, consensual, placentera y basada en el respeto corporal mutuo.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_accion_conductual", "weight": 1.0 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    },
+    {
+      "id": "RA30",
+      "statement": "Experimento y practico el Amor Ágape: un amor incondicional, protector, maduro y transformador.",
+      "scale_id": "likert_4",
+      "weights": [
+        { "dimension_id": "dim_conexion_cognitiva", "weight": 0.8 },
+        { "dimension_id": "dim_afecto_emocional", "weight": 0.9 },
+        { "dimension_id": "dim_accion_conductual", "weight": 0.8 },
+        { "dimension_id": "dom_intrapersonal_agape", "weight": 1.0 },
+        { "dimension_id": "dom_interpersonal_agape", "weight": 1.0 }
+      ]
+    }
+  ]
+}
