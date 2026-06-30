@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  password  String?  // Hashed password for admin, optional if using Firebase for clients
+  role      Role     @default(CLIENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  results   SurveyResult[]
+}
+
+enum Role {
+  ADMIN
+  CLIENT
+}
+
+model Survey {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  questions   Question[]
+  levels      Level[]
+  results     SurveyResult[]
+}
+
+model Question {
+  id        String   @id @default(uuid())
+  surveyId  String
+  survey    Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  code      String?  // e.g. Q01, Q02
+  text      String
+  category  String?
+  dimension String?
+  domain    Int?     // Domain 1, 2, 3
+  createdAt DateTime @default(now())
+
+  // We could add possible answers here, or assume a fixed scale (0-3) for MVP
+}
+
+model Level {
+  id          String   @id @default(uuid())
+  surveyId    String
+  survey      Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  name        String   // e.g. Zona Verde
+  minScore    Int
+  maxScore    Int
+  description String?
+  createdAt   DateTime @default(now())
+}
+
+model SurveyResult {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  surveyId  String
+  survey    Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  score     Int
+  zone      String?  // Calculated zone based on Level
+  answers   Json     // Store the mapping of questionId -> selectedValue
+  createdAt DateTime @default(now())
+}
