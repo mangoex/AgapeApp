@@ -71,7 +71,11 @@ app.post('/api/auth/login', async (req, res) => {
 // Get all surveys
 app.get('/api/surveys', async (req, res) => {
   try {
-    const surveys = await prisma.survey.findMany();
+    const surveys = await prisma.survey.findMany({
+      include: {
+        levels: true
+      }
+    });
     res.json(surveys);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch surveys' });

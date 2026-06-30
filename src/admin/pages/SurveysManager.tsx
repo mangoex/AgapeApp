@@ -3,7 +3,6 @@ import { Plus, Edit2, Trash2, ChevronDown, ChevronUp, Settings, GitBranch, Activ
 
 interface SurveyLevel {
   name: string;
-  name: string;
   minScore: number;
   maxScore: number;
   description: string;
@@ -45,6 +44,15 @@ export function SurveysManager() {
 
   const toggleExpand = (id: string) => {
     setExpandedId(expandedId === id ? null : id);
+  };
+
+  const getLevelColors = (name: string) => {
+    const n = name.toUpperCase();
+    if (n.includes('VERDE')) return { border: 'emerald-500', text: 'text-emerald-500' };
+    if (n.includes('AMARILLA')) return { border: 'amber-500', text: 'text-amber-500' };
+    if (n.includes('ROJA')) return { border: 'red-500', text: 'text-red-500' };
+    if (n.includes('CRÍTICA')) return { border: 'rose-700', text: 'text-rose-700' };
+    return { border: 'gray-500', text: 'text-gray-700' };
   };
 
   return (
@@ -132,10 +140,12 @@ export function SurveysManager() {
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {survey.levels.map((level, idx) => (
-                        <div key={idx} className={`p-5 rounded-xl border-l-4 bg-white border border-gray-200 shadow-sm relative group`} style={{ borderLeftColor: level.color.match(/border-([a-z]+-\d+)/)?.[0].replace('border-', '') }}>
+                      {survey.levels && survey.levels.map((level, idx) => {
+                        const colors = getLevelColors(level.name);
+                        return (
+                        <div key={idx} className={`p-5 rounded-xl border-l-4 bg-white border border-gray-200 shadow-sm relative group`} style={{ borderLeftColor: `var(--tw-colors-${colors.border})`, borderColor: `var(--tw-colors-${colors.border})` }}>
                           <div className="flex justify-between items-start mb-2">
-                            <h5 className={`font-bold ${level.color.split(' ')[0]}`}>{level.name}</h5>
+                            <h5 className={`font-bold ${colors.text}`}>{level.name}</h5>
                             <span className="text-xs font-mono font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                               {level.minScore} - {level.maxScore} pts
                             </span>
@@ -152,7 +162,7 @@ export function SurveysManager() {
                             <Edit2 size={16}/>
                           </button>
                         </div>
-                      ))}
+                      )})}
                     </div>
                   </div>
 

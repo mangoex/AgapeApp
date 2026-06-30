@@ -50,28 +50,28 @@ async function main() {
       levels: {
         create: [
           {
-            name: 'Zona Verde',
+            name: 'ZONA VERDE',
             minScore: 0,
             maxScore: 30,
             description: 'Posees una base sólida de respeto. Requiere un enfoque de consolidación y nutrición de tu Amor Ágape.',
             clinicalApproach: 'Consolidación del amor propio incondicional y prevención primaria.'
           },
           {
-            name: 'Zona Amarilla',
+            name: 'ZONA AMARILLA',
             minScore: 31,
             maxScore: 75,
             description: 'Alerta preventiva. Hay presencia de conductas de descuido emocional y rigidez cognitiva autopunitiva.',
             clinicalApproach: 'Intervención temprana cognitivo-conductual y psicoeducación de autocompasión.'
           },
           {
-            name: 'Zona Roja',
+            name: 'ZONA ROJA',
             minScore: 76,
             maxScore: 130,
             description: 'Riesgo a tu integridad psicofísica. Ejerces niveles elevados de castigo y coacción interna.',
             clinicalApproach: 'Reestructuración cognitiva profunda, terapia de aceptación y compromiso (ACT), acompañamiento psicoterapéutico.'
           },
           {
-            name: 'Zona Crítica',
+            name: 'ZONA CRÍTICA',
             minScore: 131,
             maxScore: 186,
             description: 'Tu seguridad y bienestar psicológico están en una fase extremadamente vulnerable.',

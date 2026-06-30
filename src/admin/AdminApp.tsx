@@ -15,6 +15,13 @@ import { ResultsViewer } from './pages/ResultsViewer';
 import { UsersManager } from './pages/UsersManager';
 import { Login } from './pages/Login';
 
+const SettingsPlaceholder = () => (
+  <div className="p-8">
+    <h2 className="text-2xl font-playfair font-bold text-[#07070F]">Configuración</h2>
+    <p className="text-gray-500 mt-1">Módulo en construcción.</p>
+  </div>
+);
+
 export function AdminApp() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -93,6 +100,7 @@ export function AdminApp() {
           <Route path="/surveys" element={<SurveysManager />} />
           <Route path="/results" element={<ResultsViewer />} />
           <Route path="/users" element={<UsersManager />} />
+          <Route path="/settings" element={<SettingsPlaceholder />} />
         </Routes>
       </main>
     </div>
