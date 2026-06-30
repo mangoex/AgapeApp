@@ -3,8 +3,9 @@ import { Plus, Edit2, Trash2, ChevronDown, ChevronUp, Settings, GitBranch, Activ
 
 interface SurveyLevel {
   name: string;
-  min: number;
-  max: number;
+  name: string;
+  minScore: number;
+  maxScore: number;
   description: string;
   clinicalApproach: string;
   color: string;
@@ -24,24 +25,22 @@ export function SurveysManager() {
   const [expandedId, setExpandedId] = useState<string | null>('1');
 
   useEffect(() => {
-    // Simulando fetch de base de datos
-    setTimeout(() => {
-      setSurveys([
-        { 
-          id: '1', 
-          name: 'Autoviolentómetro: Cero Amor', 
-          description: 'Mide la conducta dañina autoinfligida agrupada en tres grandes dimensiones.',
-          adaptiveRule: 'Si Dom 1 (Q01-Q08) < 3 pts → Saltar Dom 2 y pasar a Dom 3',
-          levels: [
-            { name: 'ZONA VERDE', min: 0, max: 30, color: 'text-emerald-500 border-emerald-500 bg-emerald-50', description: 'Posees una base sólida de respeto. Requiere un enfoque de consolidación y nutrición de tu Amor Ágape.', clinicalApproach: 'Consolidación del amor propio incondicional y prevención primaria.' },
-            { name: 'ZONA AMARILLA', min: 31, max: 75, color: 'text-amber-500 border-amber-500 bg-amber-50', description: 'Alerta preventiva. Hay presencia de conductas de descuido emocional y rigidez cognitiva autopunitiva.', clinicalApproach: 'Intervención temprana cognitivo-conductual y psicoeducación de autocompasión.' },
-            { name: 'ZONA ROJA', min: 76, max: 130, color: 'text-red-500 border-red-500 bg-red-50', description: 'Riesgo a tu integridad psicofísica. Ejerces niveles elevados de castigo y coacción interna.', clinicalApproach: 'Reestructuración cognitiva profunda, terapia de aceptación y compromiso (ACT), acompañamiento psicoterapéutico.' },
-            { name: 'ZONA CRÍTICA', min: 131, max: 186, color: 'text-rose-700 border-rose-700 bg-rose-50', description: 'Tu seguridad y bienestar psicológico están en una fase extremadamente vulnerable.', clinicalApproach: 'Protocolo de prevención de conducta de riesgo inminente, desactivación de crisis agudas.' }
-          ]
-        }
-      ]);
-      setLoading(false);
-    }, 500);
+    const fetchSurveys = async () => {
+      try {
+        const token = localStorage.getItem('adminToken');
+        const res = await fetch('/api/surveys', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        setSurveys(data);
+        if(data.length > 0) setExpandedId(data[0].id);
+        setLoading(false);
+      } catch (e) {
+        console.error("Failed to load surveys", e);
+        setLoading(false);
+      }
+    };
+    fetchSurveys();
   }, []);
 
   const toggleExpand = (id: string) => {
@@ -138,7 +137,7 @@ export function SurveysManager() {
                           <div className="flex justify-between items-start mb-2">
                             <h5 className={`font-bold ${level.color.split(' ')[0]}`}>{level.name}</h5>
                             <span className="text-xs font-mono font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                              {level.min} - {level.max} pts
+                              {level.minScore} - {level.maxScore} pts
                             </span>
                           </div>
                           <p className="text-sm text-gray-600 mb-3 leading-relaxed">

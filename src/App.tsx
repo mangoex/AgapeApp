@@ -114,6 +114,17 @@ export default function App() {
   const [currentScreen, setCurrentScreen] = useState<'splash' | 'onboarding' | 'auth' | 'survey' | 'results' | 'sos'>('splash');
   
   // App Workspace State
+  const [surveyData, setSurveyData] = useState<any>(null);
+
+  useEffect(() => {
+    fetch('/api/surveys')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.length > 0) setSurveyData(data[0]);
+      })
+      .catch(e => console.error("Could not load surveys:", e));
+  }, []);
+  // App Workspace State
   const [userEmail, setUserEmail] = useState('contacto@paciente.nicomaco.org');
   const [userName, setUserName] = useState('Paciente Demo');
   const [authAgreed, setAuthAgreed] = useState(false);
@@ -175,6 +186,25 @@ export default function App() {
     };
   }, [answers]);
 
+  const saveResult = async (finalAnswers: Record<string, number>, finalScore: number, finalZone: string) => {
+    if (!surveyData) return;
+    try {
+      await fetch('/api/results', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          surveyId: surveyData.id,
+          score: finalScore,
+          zone: finalZone,
+          answers: finalAnswers,
+          patient: { name: userName, email: userEmail }
+        })
+      });
+    } catch (e) {
+      console.error('Failed to save result', e);
+    }
+  };
+
   // Option selection handler
   const handleSelectOption = (score: number) => {
     if (!currentQuestion) return;
@@ -186,6 +216,17 @@ export default function App() {
     // "Si el usuario selecciona 2 o 3 en cualquier reactivo del Dominio 3, se detona el protocolo SOS de emergencia inminente."
     if (currentQuestion.dominio === 3 && score >= 2) {
       setTriggeringQuestion(currentQuestion);
+      
+      const earned = (Object.values(newAnswers) as number[]).reduce((a: number, b: number) => a + b, 0);
+      const maxPossible = Object.keys(newAnswers).length * 3;
+      const scaled = Math.round((earned / maxPossible) * 186);
+      let matchedZone = SCORE_ZONES[0];
+      if (scaled <= 30) matchedZone = SCORE_ZONES[0];
+      else if (scaled <= 75) matchedZone = SCORE_ZONES[1];
+      else if (scaled <= 130) matchedZone = SCORE_ZONES[2];
+      else matchedZone = SCORE_ZONES[3];
+      
+      saveResult(newAnswers, scaled, matchedZone.name);
       setCurrentScreen('sos');
       return;
     }
@@ -201,6 +242,12 @@ export default function App() {
       const earned = (Object.values(newAnswers) as number[]).reduce((a: number, b: number) => a + b, 0);
       const maxPossible = Object.keys(newAnswers).length * 3;
       const scaled = Math.round((earned / maxPossible) * 186);
+      
+      let matchedZone = SCORE_ZONES[0];
+      if (scaled <= 30) matchedZone = SCORE_ZONES[0];
+      else if (scaled <= 75) matchedZone = SCORE_ZONES[1];
+      else if (scaled <= 130) matchedZone = SCORE_ZONES[2];
+      else matchedZone = SCORE_ZONES[3];
 
       if (scaled >= 131) {
         // High composite score (Zona Crítica) - find first critical question in Dom 3 answered >= 2 or default
@@ -210,8 +257,10 @@ export default function App() {
         })?.[0];
         const firstCritQ = firstCritQId ? SURVEY_QUESTIONS.find(q => q.id === firstCritQId) : SURVEY_QUESTIONS.find(q => q.id === 'Q55');
         setTriggeringQuestion(firstCritQ || SURVEY_QUESTIONS.find(q => q.id === 'Q55') || null);
+        saveResult(newAnswers, scaled, matchedZone.name);
         setCurrentScreen('sos');
       } else {
+        saveResult(newAnswers, scaled, matchedZone.name);
         setCurrentScreen('results');
       }
     }
@@ -239,6 +288,7 @@ export default function App() {
         greenAnswers[id] = 0;
       }
       setAnswers(greenAnswers);
+      saveResult(greenAnswers, 0, 'Verde');
       setCurrentQuestionIndex(0);
       setCurrentScreen('results');
       showToast('Simulación de Zona Verde (AutoAmor Leve) activada.');
@@ -260,6 +310,10 @@ export default function App() {
         yellowAnswers[id] = 1;
       }
       setAnswers(yellowAnswers);
+      const earned = Object.values(yellowAnswers).reduce((a, b) => a + b, 0);
+      const maxPossible = Object.keys(yellowAnswers).length * 3;
+      const scaled = Math.round((earned / maxPossible) * 186);
+      saveResult(yellowAnswers, scaled, 'Amarilla');
       setCurrentQuestionIndex(0);
       setCurrentScreen('results');
       showToast('Simulación de Zona Amarilla (Autoviolencia Moderada) activada.');
@@ -279,6 +333,10 @@ export default function App() {
         redAnswers[id] = 1; // Sum = 84 + 20 = 104 (Kept < 2 to prevent direct SOS bypass)
       }
       setAnswers(redAnswers);
+      const earned = Object.values(redAnswers).reduce((a, b) => a + b, 0);
+      const maxPossible = Object.keys(redAnswers).length * 3;
+      const scaled = Math.round((earned / maxPossible) * 186);
+      saveResult(redAnswers, scaled, 'Roja');
       setCurrentQuestionIndex(0);
       setCurrentScreen('results');
       showToast('Simulación de Zona Roja (Autoviolencia Severa) activada.');
@@ -290,6 +348,7 @@ export default function App() {
       }
       sosAnswers['Q55'] = 3; // Critical question in Dominio 3 gets Always (3) -> triggers immediate hijack
       setAnswers(sosAnswers);
+      saveResult(sosAnswers, 186, 'Crítica');
       setCurrentQuestionIndex(0);
       setTriggeringQuestion(SURVEY_QUESTIONS.find(q => q.id === 'Q55') || null);
       setCurrentScreen('sos');

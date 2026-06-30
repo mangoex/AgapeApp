@@ -138,6 +138,64 @@ app.get('/api/results', verifyToken, async (req, res) => {
   }
 });
 
+app.post('/api/results', async (req, res) => {
+  try {
+    const { surveyId, score, zone, answers, patient } = req.body;
+    
+    // UPSERT USER
+    let user = await prisma.user.findUnique({ where: { email: patient.email } });
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          email: patient.email,
+          name: patient.name,
+          role: 'CLIENT'
+        }
+      });
+    }
+
+    const result = await prisma.surveyResult.create({
+      data: {
+        userId: user.id,
+        surveyId,
+        score,
+        zone,
+        answers
+      }
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to save result' });
+  }
+});
+
+// --- STATS API ---
+
+app.get('/api/stats', verifyToken, async (req, res) => {
+  try {
+    const totalPatients = await prisma.user.count({ where: { role: 'CLIENT' } });
+    const totalSurveys = await prisma.surveyResult.count();
+    
+    const results = await prisma.surveyResult.findMany({
+      select: { score: true, zone: true }
+    });
+    
+    const avgScore = totalSurveys > 0 ? (results.reduce((acc, curr) => acc + curr.score, 0) / totalSurveys).toFixed(1) : '0.0';
+    const sosCount = results.filter(r => r.zone?.toLowerCase().includes('crítica') || r.zone?.toLowerCase().includes('roja')).length;
+
+    res.json({
+      patients: totalPatients,
+      completedSurveys: totalSurveys,
+      averageScore: avgScore,
+      sosAlerts: sosCount
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch stats' });
+  }
+});
+
 // React Router SPA Fallback - Redirigir todo lo que no sea API a index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist/index.html'));

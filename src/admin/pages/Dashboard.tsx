@@ -1,12 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Users, FileText, BarChart, TrendingUp, AlertTriangle } from 'lucide-react';
 
 export function Dashboard() {
+  const [statsData, setStatsData] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const token = localStorage.getItem('adminToken');
+        const res = await fetch('/api/stats', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        setStatsData(data);
+      } catch(e) {
+        console.error(e);
+      }
+    };
+    fetchStats();
+  }, []);
+
   const stats = [
-    { title: 'Pacientes Registrados', value: '142', icon: <Users size={24} className="text-[#7C3AED]" />, trend: '+12% este mes' },
-    { title: 'Encuestas Completadas', value: '840', icon: <FileText size={24} className="text-blue-500" />, trend: '+54 esta semana' },
-    { title: 'Promedio Nivel Cero Amor', value: '45.2', icon: <BarChart size={24} className="text-yellow-500" />, trend: '-2% respecto al mes pasado' },
-    { title: 'Casos en Riesgo Crítico', value: '18', icon: <AlertTriangle size={24} className="text-red-500" />, trend: '+3 urgentes hoy' },
+    { title: 'Pacientes Registrados', value: statsData?.patients ?? '-', icon: <Users size={24} className="text-[#7C3AED]" />, trend: 'Actualizado' },
+    { title: 'Encuestas Completadas', value: statsData?.completedSurveys ?? '-', icon: <FileText size={24} className="text-blue-500" />, trend: 'En tiempo real' },
+    { title: 'Promedio Nivel Cero Amor', value: statsData?.averageScore ?? '-', icon: <BarChart size={24} className="text-yellow-500" />, trend: 'Pts globales' },
+    { title: 'Casos en Riesgo Crítico', value: statsData?.sosAlerts ?? '-', icon: <AlertTriangle size={24} className="text-red-500" />, trend: 'Alertas SOS' },
   ];
 
   return (

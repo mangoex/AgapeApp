@@ -1,15 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, Printer, Download, Eye } from 'lucide-react';
+import { Search, Filter, Printer, Download, Eye, X } from 'lucide-react';
+import { SURVEY_QUESTIONS } from '../../../src/data'; // Ensure we can lookup questions
 
 export function ResultsViewer() {
   const [results, setResults] = useState<any[]>([]);
+  const [selectedResult, setSelectedResult] = useState<any>(null);
 
   useEffect(() => {
-    setResults([
-      { id: '101', patient: 'Ana G.', date: '2026-06-30', score: 145, zone: 'Crítica', survey: 'Cero Amor' },
-      { id: '102', patient: 'Carlos R.', date: '2026-06-29', score: 12, zone: 'Verde', survey: 'Cero Amor' },
-      { id: '103', patient: 'María L.', date: '2026-06-28', score: 89, zone: 'Amarilla', survey: 'Cero Amor' },
-    ]);
+    const fetchResults = async () => {
+      try {
+        const token = localStorage.getItem('adminToken');
+        const res = await fetch('/api/results', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if(Array.isArray(data)) setResults(data);
+      } catch (e) {
+        console.error("Failed to load results", e);
+      }
+    };
+    fetchResults();
   }, []);
 
   const getZoneBadge = (zone: string) => {
@@ -66,16 +76,16 @@ export function ResultsViewer() {
             {results.map((res) => (
               <tr key={res.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                 <td className="px-6 py-4">
-                  <p className="font-medium text-[#07070F]">#{res.id}</p>
-                  <p className="text-xs text-gray-500">{res.date}</p>
+                  <p className="font-medium text-[#07070F]">#{res.id.substring(0,8)}</p>
+                  <p className="text-xs text-gray-500">{new Date(res.createdAt).toLocaleDateString()}</p>
                 </td>
-                <td className="px-6 py-4 font-medium text-gray-700">{res.patient}</td>
-                <td className="px-6 py-4 text-gray-600 text-sm">{res.survey}</td>
+                <td className="px-6 py-4 font-medium text-gray-700">{res.user?.name}</td>
+                <td className="px-6 py-4 text-gray-600 text-sm">{res.survey?.name}</td>
                 <td className="px-6 py-4 font-bold text-gray-800">{res.score} pts</td>
                 <td className="px-6 py-4">{getZoneBadge(res.zone)}</td>
                 <td className="px-6 py-4">
                   <div className="flex items-center justify-end gap-3">
-                    <button className="text-gray-400 hover:text-[#7C3AED] transition-colors" title="Ver Detalles">
+                    <button onClick={() => setSelectedResult(res)} className="text-gray-400 hover:text-[#7C3AED] transition-colors" title="Ver Detalles">
                       <Eye size={18} />
                     </button>
                     <button className="text-gray-400 hover:text-[#7C3AED] transition-colors" title="Imprimir Reporte">
@@ -88,6 +98,55 @@ export function ResultsViewer() {
           </tbody>
         </table>
       </div>
+
+      {/* Modal Visor Detallado */}
+      {selectedResult && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="flex justify-between items-center p-6 border-b border-gray-100">
+              <div>
+                <h3 className="text-xl font-bold">Detalle Clínico - {selectedResult.user?.name}</h3>
+                <p className="text-sm text-gray-500">{selectedResult.user?.email} • {new Date(selectedResult.createdAt).toLocaleString()}</p>
+              </div>
+              <button onClick={() => setSelectedResult(null)} className="p-2 bg-gray-100 rounded-full hover:bg-gray-200">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                <div className="bg-white p-4 rounded-xl border border-gray-200">
+                  <p className="text-sm text-gray-500">Puntaje Total</p>
+                  <p className="text-3xl font-black">{selectedResult.score} <span className="text-lg text-gray-400 font-normal">pts</span></p>
+                </div>
+                <div className="bg-white p-4 rounded-xl border border-gray-200">
+                  <p className="text-sm text-gray-500">Zona de Riesgo Diagnosticada</p>
+                  <div className="mt-1">{getZoneBadge(selectedResult.zone)}</div>
+                </div>
+              </div>
+
+              <h4 className="font-bold text-gray-800 mb-4">Desglose de Respuestas</h4>
+              <div className="space-y-3">
+                {selectedResult.answers && Object.entries(selectedResult.answers).map(([qId, val]) => {
+                  const q = SURVEY_QUESTIONS.find(sq => sq.id === qId);
+                  return (
+                    <div key={qId} className="bg-white p-4 rounded-lg border border-gray-200 flex justify-between gap-4">
+                      <div>
+                        <span className="text-xs font-bold text-[#7C3AED] uppercase">ID: {qId}</span>
+                        <p className="text-gray-800 text-sm font-medium mt-1">"{q?.pregunta || 'Pregunta no encontrada'}"</p>
+                      </div>
+                      <div className="text-right whitespace-nowrap">
+                        <span className="inline-block px-3 py-1 bg-gray-100 rounded font-mono font-bold text-gray-600">
+                          {val} pts
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
