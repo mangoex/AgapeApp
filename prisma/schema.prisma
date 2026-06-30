@@ -25,15 +25,16 @@ enum Role {
 }
 
 model Survey {
-  id          String   @id @default(uuid())
-  name        String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(uuid())
+  name          String
+  description   String?
+  adaptiveRules Json?    // JSON for rules like "If Dom 1 < 3 skip to Dom 3"
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  questions   Question[]
-  levels      Level[]
-  results     SurveyResult[]
+  questions     Question[]
+  levels        Level[]
+  results       SurveyResult[]
 }
 
 model Question {
@@ -51,14 +52,15 @@ model Question {
 }
 
 model Level {
-  id          String   @id @default(uuid())
-  surveyId    String
-  survey      Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
-  name        String   // e.g. Zona Verde
-  minScore    Int
-  maxScore    Int
-  description String?
-  createdAt   DateTime @default(now())
+  id               String   @id @default(uuid())
+  surveyId         String
+  survey           Survey   @relation(fields: [surveyId], references: [id], onDelete: Cascade)
+  name             String   // e.g. Zona Verde
+  minScore         Int
+  maxScore         Int
+  description      String?
+  clinicalApproach String?  // e.g. Enfoque Clínico: Consolidación del amor propio...
+  createdAt        DateTime @default(now())
 }
 
 model SurveyResult {
