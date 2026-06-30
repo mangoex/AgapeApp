@@ -9,8 +9,7 @@ export function UsersManager() {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem('adminToken');
-        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-        const response = await fetch(`${apiUrl}/api/users`, {
+        const response = await fetch('/api/users', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
