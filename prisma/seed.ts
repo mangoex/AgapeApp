@@ -23,25 +23,30 @@ async function main() {
     console.log('Admin user already exists.');
   }
 
-  // Create the main survey with adaptive rules
-  const survey = await prisma.survey.create({
-    data: {
-      name: 'Autoviolentómetro: Cero Amor',
-      description: 'Mide la conducta dañina autoinfligida agrupada en tres grandes dimensiones para comprobar el comportamiento algorítmico.',
-      adaptiveRules: {
-        condition: {
-          domain: 1,
-          questions: ['Q01', 'Q02', 'Q03', 'Q04', 'Q05', 'Q06', 'Q07', 'Q08'],
-          operator: '<',
-          value: 3
+  // Check if survey already exists
+  const existingSurvey = await prisma.survey.findFirst({
+    where: { name: 'Autoviolentómetro: Cero Amor' }
+  });
+
+  if (!existingSurvey) {
+    const survey = await prisma.survey.create({
+      data: {
+        name: 'Autoviolentómetro: Cero Amor',
+        description: 'Mide la conducta dañina autoinfligida agrupada en tres grandes dimensiones para comprobar el comportamiento algorítmico.',
+        adaptiveRules: {
+          condition: {
+            domain: 1,
+            questions: ['Q01', 'Q02', 'Q03', 'Q04', 'Q05', 'Q06', 'Q07', 'Q08'],
+            operator: '<',
+            value: 3
+          },
+          action: {
+            type: 'skip_domain',
+            targetDomainToSkip: 2,
+            jumpToDomain: 3,
+            description: 'Si la suma de Dom 1 es < 3, salta a Dom 3'
+          }
         },
-        action: {
-          type: 'skip_domain',
-          targetDomainToSkip: 2,
-          jumpToDomain: 3,
-          description: 'Si la suma de Dom 1 es < 3, salta a Dom 3'
-        }
-      },
       levels: {
         create: [
           {
@@ -75,9 +80,11 @@ async function main() {
         ]
       }
     }
-  });
-
-  console.log(`Survey created: ${survey.name} with its levels and rules.`);
+    });
+    console.log(`Survey created: ${survey.name} with its levels and rules.`);
+  } else {
+    console.log('Survey already exists, skipping creation.');
+  }
 }
 
 main()
