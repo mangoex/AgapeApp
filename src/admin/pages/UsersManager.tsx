@@ -22,6 +22,12 @@ export function UsersManager() {
           'Authorization': `Bearer ${token}`
         }
       });
+      if (response.status === 401 || response.status === 400) {
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
+        window.location.href = '/admin/login';
+        return;
+      }
       if (response.ok) {
         const data = await response.json();
         setUsers(data);
@@ -81,6 +87,12 @@ export function UsersManager() {
         },
         body: JSON.stringify(payload)
       });
+      if (res.status === 401 || res.status === 400) {
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
+        window.location.href = '/admin/login';
+        return;
+      }
       if (res.ok) {
         setShowModal(false);
         setSelectedUser(null);
@@ -108,6 +120,12 @@ export function UsersManager() {
           'Authorization': `Bearer ${token}`
         }
       });
+      if (res.status === 401 || res.status === 400) {
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
+        window.location.href = '/admin/login';
+        return;
+      }
       if (res.ok) {
         setShowDeleteConfirm(false);
         setUserToDelete(null);

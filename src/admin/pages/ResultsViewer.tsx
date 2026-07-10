@@ -13,6 +13,12 @@ export function ResultsViewer() {
         const res = await fetch('/api/results', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
+        if (res.status === 401 || res.status === 400) {
+          localStorage.removeItem('adminToken');
+          localStorage.removeItem('adminUser');
+          window.location.href = '/admin/login';
+          return;
+        }
         const data = await res.json();
         if(Array.isArray(data)) setResults(data);
       } catch (e) {

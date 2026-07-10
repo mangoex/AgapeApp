@@ -54,6 +54,12 @@ export function SurveysManager() {
       const res = await fetch('/api/surveys', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
+      if (res.status === 401 || res.status === 400) {
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
+        window.location.href = '/admin/login';
+        return;
+      }
       const data = await res.json();
       setSurveys(data);
       if (data.length > 0 && !expandedId) {
@@ -112,6 +118,13 @@ export function SurveysManager() {
         body: JSON.stringify(surveyFormData)
       });
 
+      if (res.status === 401 || res.status === 400) {
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
+        window.location.href = '/admin/login';
+        return;
+      }
+
       if (res.ok) {
         setShowSurveyModal(false);
         setSelectedSurvey(null);
@@ -139,6 +152,12 @@ export function SurveysManager() {
           'Authorization': `Bearer ${token}`
         }
       });
+      if (res.status === 401 || res.status === 400) {
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
+        window.location.href = '/admin/login';
+        return;
+      }
       if (res.ok) {
         setShowSurveyDeleteConfirm(false);
         setSurveyToDelete(null);
@@ -205,6 +224,13 @@ export function SurveysManager() {
         body: JSON.stringify(levelFormData)
       });
 
+      if (res.status === 401 || res.status === 400) {
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
+        window.location.href = '/admin/login';
+        return;
+      }
+
       if (res.ok) {
         setShowLevelModal(false);
         setSelectedLevel(null);
@@ -231,6 +257,12 @@ export function SurveysManager() {
           'Authorization': `Bearer ${token}`
         }
       });
+      if (res.status === 401 || res.status === 400) {
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
+        window.location.href = '/admin/login';
+        return;
+      }
       if (res.ok) {
         setShowLevelDeleteConfirm(false);
         setLevelToDelete(null);
