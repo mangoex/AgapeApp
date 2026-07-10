@@ -152,6 +152,98 @@ app.post('/api/surveys', verifyToken, async (req, res) => {
   }
 });
 
+// Update survey details
+app.put('/api/surveys/:id', verifyToken, async (req, res) => {
+  try {
+    const { name, description } = req.body;
+    const { id } = req.params;
+
+    const updatedSurvey = await prisma.survey.update({
+      where: { id },
+      data: { name, description }
+    });
+
+    res.json(updatedSurvey);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to update survey' });
+  }
+});
+
+// Delete survey (cascades to levels, questions, results)
+app.delete('/api/surveys/:id', verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    await prisma.survey.delete({ where: { id } });
+    res.json({ success: true, message: 'Violentómetro eliminado correctamente' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to delete survey' });
+  }
+});
+
+// --- LEVELS (ZONAS CLÍNICAS) API ---
+
+// Create a survey level
+app.post('/api/surveys/:surveyId/levels', verifyToken, async (req, res) => {
+  try {
+    const { surveyId } = req.params;
+    const { name, minScore, maxScore, description, clinicalApproach } = req.body;
+
+    const newLevel = await prisma.level.create({
+      data: {
+        surveyId,
+        name,
+        minScore: parseInt(minScore),
+        maxScore: parseInt(maxScore),
+        description,
+        clinicalApproach
+      }
+    });
+
+    res.json(newLevel);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to create survey level' });
+  }
+});
+
+// Update a survey level
+app.put('/api/surveys/:surveyId/levels/:levelId', verifyToken, async (req, res) => {
+  try {
+    const { levelId } = req.params;
+    const { name, minScore, maxScore, description, clinicalApproach } = req.body;
+
+    const updatedLevel = await prisma.level.update({
+      where: { id: levelId },
+      data: {
+        name,
+        minScore: parseInt(minScore),
+        maxScore: parseInt(maxScore),
+        description,
+        clinicalApproach
+      }
+    });
+
+    res.json(updatedLevel);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to update survey level' });
+  }
+});
+
+// Delete a survey level
+app.delete('/api/surveys/:surveyId/levels/:levelId', verifyToken, async (req, res) => {
+  try {
+    const { levelId } = req.params;
+    await prisma.level.delete({ where: { id: levelId } });
+    res.json({ success: true, message: 'Nivel clínico eliminado correctamente' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to delete survey level' });
+  }
+});
+
 // --- USERS API ---
 
 app.get('/api/users', verifyToken, async (req, res) => {
@@ -193,6 +285,59 @@ app.post('/api/users', verifyToken, async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to create user' });
+  }
+});
+
+// Update user details
+app.put('/api/users/:id', verifyToken, async (req, res) => {
+  try {
+    const { name, email, password, role } = req.body;
+    const { id } = req.params;
+
+    // Check if email is already taken by another user
+    const existing = await prisma.user.findFirst({
+      where: {
+        email,
+        NOT: { id }
+      }
+    });
+    if (existing) {
+      return res.status(400).json({ error: 'El correo ya está registrado por otro usuario.' });
+    }
+
+    const updateData: any = {
+      name,
+      email,
+      role: role === 'ADMIN' ? 'ADMIN' : 'CLIENT'
+    };
+
+    if (role === 'ADMIN' && password) {
+      updateData.password = await bcrypt.hash(password, 10);
+    } else if (role === 'CLIENT') {
+      updateData.password = null; // patients don't use passwords in this database
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: updateData
+    });
+
+    res.json({ id: updatedUser.id, name: updatedUser.name, email: updatedUser.email, role: updatedUser.role, createdAt: updatedUser.createdAt });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to update user' });
+  }
+});
+
+// Delete user (cascades to results)
+app.delete('/api/users/:id', verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    await prisma.user.delete({ where: { id } });
+    res.json({ success: true, message: 'Usuario eliminado correctamente' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to delete user' });
   }
 });
 
